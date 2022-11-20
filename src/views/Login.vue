@@ -6,10 +6,10 @@
       </div>
       <el-form>
         <el-form-item>
-          <el-input v-model="username"></el-input>
+          <el-input v-model="username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="password" show-password></el-input>
+          <el-input v-model="password" show-password placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div>
@@ -22,8 +22,8 @@
 <script lang="ts" setup>
 import { ref } from '@vue/reactivity';
 import { login } from '../plugin/axios/interface';
-import { ElMessage } from 'element-plus';
 import {User} from "../entity/response/User";
+import router from "../router";
 
 // 用户名
 const username = ref('chenjianhua');
@@ -33,7 +33,8 @@ function loginBoke() {
   user.username = username.value;
   user.password = password.value;
   login(user).then(res=>{
-    console.log(res)
+    //current login user: res.result[0]
+    router.push({ name: 'main', replace : true });
   }).catch(e=>{
     console.error(e)
   })

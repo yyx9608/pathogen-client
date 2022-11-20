@@ -13,7 +13,7 @@ export function taskList(params: object) {
   return axios.post('/prj/task/queryList', params);
 }
 export function login(params: User) {
-  return axios.post<Response<User>, Response<User>, User>('/login', params, { headers: { 'Content-Type': 'multipart/form-data' } });
+  return axios.post<Response<User[]>, Response<User[]>, User>('/login', params, { headers: { 'Content-Type': 'multipart/form-data' } });
 }
 export function createTask(params: object) {
   return axios.post('/prj/task/insert', params)
