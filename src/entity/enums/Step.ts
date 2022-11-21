@@ -1,3 +1,6 @@
+/**
+ * 当前任务步骤
+ */
 export enum Step {
     RESOLVE_SAMPLE_INFO = "解析样本信息",
     DOWNLOAD_SEQUENCE_DATA = "下载测序数据",

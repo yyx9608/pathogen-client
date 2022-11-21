@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { ref } from '@vue/reactivity';
-import { login } from '../plugin/axios/interface';
+import { login } from '../dao/interface';
 import {User} from "../entity/response/User";
 import router from "../router";
 

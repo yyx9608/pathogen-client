@@ -1,3 +1,6 @@
+/**
+ * 样本状态
+ */
 export enum SampleStatus {
     INIT = "未审核",
     APPROVED = "审核通过",

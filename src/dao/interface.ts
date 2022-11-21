@@ -1,19 +1,31 @@
-import exp from 'constants';
-import axios from './index';
-import {url} from "inspector";
-import {User} from "../../entity/response/User";
-import {Response} from "../../entity/response/Response";
+import axios from '../plugin/axios';
+import {User} from "../entity/response/User";
+import {Response} from "../entity/response/Response";
+import {Lab} from "../entity/response/Lab";
+import {BasePagerRequest} from "../entity/request/BasePagerRequest";
+import {RequestUrl} from "../plugin/axios/RequestUrl";
+import {Task} from "../entity/response/Task";
+import {TasksPagerRequest} from "../entity/request/TasksPagerRequest";
 
 
-// 
-export function queryList(params: object) {
-  return axios.post('/prj/lab/queryList', params);
+/**
+ * 查询实验室列表
+ * @param params
+ */
+export function queryLabs(params: BasePagerRequest) {
+  return axios.post<Response<Lab[]>, Response<Lab[]>, BasePagerRequest>(RequestUrl.QUERY_LABS, params);
 }
-export function taskList(params: object) {
-  return axios.post('/prj/task/queryList', params);
+
+export function taskList(params: TasksPagerRequest) {
+  return axios.post<Response<Task[]>, Response<Task[]>, TasksPagerRequest>(RequestUrl.QUERY_TASK_LIST , params);
 }
+
+export function task(params: Task){
+  return axios.post<Response<Task>, Response<Task>, Task>(RequestUrl.QUERY_TASK, params);
+}
+
 export function login(params: User) {
-  return axios.post<Response<User[]>, Response<User[]>, User>('/login', params, { headers: { 'Content-Type': 'multipart/form-data' } });
+  return axios.post<Response<User[]>, Response<User[]>, User>(RequestUrl.LOGIN, params, { headers: { 'Content-Type': 'multipart/form-data' } });
 }
 export function createTask(params: object) {
   return axios.post('/prj/task/insert', params)
@@ -59,4 +71,4 @@ function taskSearch(params: object) {
 function pathogenQuery(params: object) {
   return axios.post('/prj/task/pathogen/query', params)
 }
-export default { queryList, login, taskList, createTask, startTask ,stopTask , sampleResult ,sampleInfo ,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}
+export default { queryLabs, login, taskList, task, createTask, startTask ,stopTask , sampleResult ,sampleInfo ,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}

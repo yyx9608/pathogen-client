@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   server: {
-
+    open : true,
     proxy: {
       '/devServer': {
         target: 'http://1486641sd0.iask.in:35485',

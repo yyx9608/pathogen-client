@@ -1,3 +1,6 @@
+/**
+ * 任务状态
+ */
 export enum TaskStatus {
 
     INIT = "未运行",

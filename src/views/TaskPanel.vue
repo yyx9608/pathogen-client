@@ -1,12 +1,11 @@
 <template>
-
+  <p>Task Panel</p>
 </template>
 
 <script>
 export default {
-  name: "Home"
+  name: "TaskPanel"
 }
-
 </script>
 
 <style scoped>

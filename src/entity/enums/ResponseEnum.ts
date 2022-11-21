@@ -1,3 +1,6 @@
+/**
+ * 响应码
+ */
 export enum ResponseEnum {
 
     SUCCESS = 0, //操作成功
