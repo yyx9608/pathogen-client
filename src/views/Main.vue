@@ -1,19 +1,24 @@
 <template>
   <el-container class="main-container">
+
     <el-header height="50px">
-      <div class="toolbar">
-        <el-select v-model="currentLab.lab" placeholder="选择实验室" @change="onLabSelect()">
-          <el-option v-for="item in labs.content" :key="item.id" :value="item.id" :label="item.name" :id="item.id"/>
-        </el-select>
-      </div>
+      <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          :ellipsis="false">
+        <el-sub-menu index="1" :disabled="labs.content.length < 1">
+          <template #title>{{ selectedLab }}</template>
+          <el-menu-item @click="onLabSelect(item.id, item.name)" v-for="(item,index) in labs.content" :key="item.id" :value="item.id" :label="item.name" :id="item.id" index="1-{{String(index)}}">{{item.name}}</el-menu-item>
+        </el-sub-menu>
+      </el-menu>
     </el-header>
     <el-container>
       <el-aside width="100px">
         <el-scrollbar>
           <p v-for="item in currentLab.taskPager.content" :key="item.id" @click="onTaskSelect(item.id)" class="infinite-list-item">{{ item.name }}</p>
         </el-scrollbar>
-        <p v-if="currentLab.taskPager.loading">加载中...</p>
-        <p v-if="!currentLab.taskPager.hasMore">没有更多了</p>
+
       </el-aside>
       <el-main>Main</el-main>
     </el-container>
@@ -38,7 +43,8 @@ import TaskPanel from "./TaskPanel.vue";
 /**
  * list of labs
  */
-let labs = ref<Pager<Lab>>(new Pager<Lab>());
+let labs = ref<Pager<Lab>>(new Pager<Lab>()) as Ref<Pager<Lab>>;
+let selectedLab = ref<string>("选择实验室") as Ref<string>;
 
 /**
  * data in lab
@@ -76,7 +82,12 @@ function queryLabs() {
   })
 }
 
-function onLabSelect() {
+function onLabSelect(labId : string, labName : string) {
+  if (labId === currentLab.value.lab){
+    return;
+  }
+  selectedLab.value = labName;
+  currentLab.value.lab = labId;
   //clear task array
   currentLab.value.taskPager = new Pager<Task>();
   //clear samples in task
