@@ -1,9 +1,9 @@
 <template>
 
   <!-- 加载中显示骨架 -->
-  <el-skeleton v-if="fetchingTask" :rows="5" animated />
+  <el-skeleton v-if="fetchingTask" :rows="10" animated />
   <!-- 加载成功显示 -->
-  <el-container v-if="currentTask.task.id !== undefined">
+  <el-container direction="vertical" v-if="currentTask.task.id !== undefined">
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
@@ -85,7 +85,16 @@
 
     <el-drawer v-model="showDrawer" title="I am the title" :with-header="false">
       <el-skeleton v-if="fetchingSamples" :rows="10" animated />
+      <el-collapse v-if="!fetchingSamples" accordion>
+        <el-collapse-item v-for='item in currentTask.samples' :title='item.tag'>
+          <ul>
+            <li v-for='subItem in item.content' @mousedown="selectSample(subItem.id)">{{ subItem.name }} -- {{ subItem.status }}</li>
+          </ul>
+        </el-collapse-item>
+      </el-collapse>
     </el-drawer>
+
+    <SamplePanel></SamplePanel>
 
   </el-container>
 
@@ -104,6 +113,8 @@ import {Task} from "../entity/response/Task";
 import {SequenceData} from "../entity/response/SequenceData";
 import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
 import {ElMessage} from "element-plus";
+import {DataInSample} from "../entity/local/DataInSample";
+import SamplePanel from "./SamplePanel.vue";
 
 const props = defineProps<{ taskId : string }>();
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
@@ -119,7 +130,6 @@ class Command {
 }
 const fetchingSamples = ref<boolean>(false) as Ref<boolean>;
 const showDrawer = ref<boolean>(false) as Ref<boolean>;
-
 
 
 currentTask.value.taskId = props.taskId;
@@ -162,8 +172,16 @@ function startTask() {
   console.log('start task')
 }
 
+function selectSample(sampleId : string){
+  console.log('select sample -- ' + sampleId);
+  const currentTaskId = currentTask.value.taskId;
+  const selectedSampleId = sampleId;
+  // todo fetch result of selected sample
+}
+
 function showSamples() {
-  if (currentTask.value.samples.tag !== undefined){
+  if (currentTask.value.samples.length > 0){
+    showDrawer.value = true;
     return;
   }
   fetchingSamples.value = true;

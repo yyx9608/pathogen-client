@@ -55,7 +55,7 @@ function sampleInfo(params: object) {
 }
 
 function sampleInfoGroupByAgent(params: QuerySampleInfoRequest){
-  return axios.post<Response<Group<string, SampleInfo[]>>,Response<Group<string, SampleInfo[]>>, QuerySampleInfoRequest>(RequestUrl.QUERY_SAMPLES_GROUP_BY_AGENT, params);
+  return axios.post<Response<Group<string, SampleInfo[]>[]>,Response<Group<string, SampleInfo[]>[]>, QuerySampleInfoRequest>(RequestUrl.QUERY_SAMPLES_GROUP_BY_AGENT, params);
 }
 
 function generateRepo(params: object) {
