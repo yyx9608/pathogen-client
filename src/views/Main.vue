@@ -1,9 +1,8 @@
 <template>
   <el-container class="main-container">
 
-    <el-header height="50px">
+    <el-header class="header">
       <el-menu
-          :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
           :ellipsis="false">
@@ -13,14 +12,19 @@
         </el-sub-menu>
       </el-menu>
     </el-header>
-    <el-container>
-      <el-aside width="100px">
-        <el-scrollbar>
-          <p v-for="item in currentLab.taskPager.content" :key="item.id" @click="onTaskSelect(item.id)" class="infinite-list-item">{{ item.name }}</p>
-        </el-scrollbar>
-
+    <el-container class="sub-container">
+      <el-aside class="aside list" style="overflow: auto">
+        <ul v-infinite-scroll="loadMoreTask" class="infinite-list list "
+            :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
+          <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item" >{{ item.name }}</li>
+        </ul>
+        <p v-if="currentLab.taskPager.loading">加载中...</p>
+        <p v-if="!currentLab.taskPager.hasMore">我是有底线的</p>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <TaskPanel v-if="currentTask.taskId !== ''" :task-id="currentTask.taskId"></TaskPanel>
+        <el-empty v-if="currentTask.taskId === ''" description="empty view" />
+      </el-main>
     </el-container>
   </el-container>
 
@@ -36,34 +40,29 @@ import {Lab} from "../entity/response/Lab";
 import {Pager} from "../entity/Pager";
 import {Task} from "../entity/response/Task";
 import {TasksPagerRequest} from "../entity/request/TasksPagerRequest";
-import {Group} from "../entity/response/SamplesGroupByAgent";
+import {Group} from "../entity/response/Group";
 import {SampleInfo} from "../entity/response/SampleInfo";
 import TaskPanel from "./TaskPanel.vue";
+import {DataInLab} from "../entity/local/DataInLab";
+import {DataInTask} from "../entity/local/DataInTask";
 
 /**
  * list of labs
  */
-let labs = ref<Pager<Lab>>(new Pager<Lab>()) as Ref<Pager<Lab>>;
-let selectedLab = ref<string>("选择实验室") as Ref<string>;
+const labs = ref<Pager<Lab>>(new Pager<Lab>()) as Ref<Pager<Lab>>;
+const selectedLab = ref<string>("选择实验室") as Ref<string>;
 
 /**
  * data in lab
  */
-class DataInLab {
-  lab : string = '';
-  taskPager : Pager<Task> = new Pager<Task>();
-}
-let currentLab = ref<DataInLab>(new DataInLab()) as Ref<DataInLab>;
+
+const currentLab = ref<DataInLab>(new DataInLab()) as Ref<DataInLab>;
 
 /**
  * data in task
  */
-class DataInTask {
-  taskId : string = '';
-  task : Task = new Task();
-  samples : Group<string, SampleInfo[]> = new Group<string, SampleInfo[]>();
-}
-let currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
+
+const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
 
 onMounted(() => {
   queryLabs()
@@ -134,6 +133,9 @@ function onTaskSelect(taskId : string){
   }
   //reset current task
   currentTask.value.taskId = taskId;
+
+  //task详情放到TaskPanel组件中处理
+  /**
   currentTask.value.task = new Task();
   currentTask.value.samples = new Group<string, SampleInfo[]>();
   //fetch task detail
@@ -144,6 +146,7 @@ function onTaskSelect(taskId : string){
   }).catch(e=>{
     console.error(e)
   })
+   */
 }
 
 </script>
@@ -155,37 +158,34 @@ function onTaskSelect(taskId : string){
   height: 100%;
 }
 
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
+.sub-container {
+  width: 100%;
+  height: calc(100% - 50px);
+}
+
+.aside {
+  width: 200px;
+  margin-top: 50px;
+}
+
+.infinite-list .infinite-list-item {
   display: flex;
-  /*align-items: center;*/
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: var(--el-color-primary-light-9);
+  margin: 10px;
+  color: var(--el-color-primary);
 }
 
-.layout-container-demo .el-header {
-  position: relative;
-  background-color: var(--el-color-primary-light-7);
-  color: var(--el-text-color-primary);
-}
-
-.layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
-}
-
-.layout-container-demo .el-menu {
-  border-right: none;
-}
-
-.layout-container-demo .el-main {
+.list {
   padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-.layout-container-demo .toolbar {
-  display: inline-flex;
-  /*align-items: center;*/
-  /*justify-content: center;*/
-  height: 100%;
-  right: 20px;
+.header {
+  height: 50px;
 }
+
 </style>

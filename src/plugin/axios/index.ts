@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
+import {ElMessage, ElNotification} from 'element-plus';
 import {ResponseEnum} from "../../entity/enums/ResponseEnum";
 import store from '../../store/index';
 
@@ -11,7 +11,7 @@ axios.interceptors.response.use(res => {
     if (res.data.code === ResponseEnum.LOGIN_FAIL){
         ElMessage.error(res.data.msg);
     } else if (res.data.code === ResponseEnum.LOGIN_SUCCESS){
-        ElMessage.info(res.data.msg);
+        ElMessage.success(res.data.msg);
         store.commit("signIn",res.data.result[0]);
         console.log(res.data)
         return res.data;

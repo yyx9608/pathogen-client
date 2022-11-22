@@ -6,6 +6,10 @@ import {BasePagerRequest} from "../entity/request/BasePagerRequest";
 import {RequestUrl} from "../plugin/axios/RequestUrl";
 import {Task} from "../entity/response/Task";
 import {TasksPagerRequest} from "../entity/request/TasksPagerRequest";
+import {SequenceData} from "../entity/response/SequenceData";
+import {Group} from "../entity/response/Group";
+import {SampleInfo} from "../entity/response/SampleInfo";
+import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
 
 
 /**
@@ -27,6 +31,11 @@ export function task(params: Task){
 export function login(params: User) {
   return axios.post<Response<User[]>, Response<User[]>, User>(RequestUrl.LOGIN, params, { headers: { 'Content-Type': 'multipart/form-data' } });
 }
+
+export function querySeq(params: SequenceData){
+  return axios.post<Response<SequenceData>, Response<SequenceData>, SequenceData>(RequestUrl.QUERY_SEQUENCE, params);
+}
+
 export function createTask(params: object) {
   return axios.post('/prj/task/insert', params)
 }
@@ -44,6 +53,11 @@ function sampleResult(params: object) {
 function sampleInfo(params: object) {
   return axios.post('/prj/sample/queryList', params)
 }
+
+function sampleInfoGroupByAgent(params: QuerySampleInfoRequest){
+  return axios.post<Response<Group<string, SampleInfo[]>>,Response<Group<string, SampleInfo[]>>, QuerySampleInfoRequest>(RequestUrl.QUERY_SAMPLES_GROUP_BY_AGENT, params);
+}
+
 function generateRepo(params: object) {
   return axios.post( '/prj/task/result/report', params)
 }
@@ -71,4 +85,4 @@ function taskSearch(params: object) {
 function pathogenQuery(params: object) {
   return axios.post('/prj/task/pathogen/query', params)
 }
-export default { queryLabs, login, taskList, task, createTask, startTask ,stopTask , sampleResult ,sampleInfo ,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}
+export default { queryLabs, login, querySeq, taskList, task, createTask, startTask ,stopTask , sampleResult ,sampleInfo ,sampleInfoGroupByAgent,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}

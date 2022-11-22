@@ -4,5 +4,7 @@ export class RequestUrl {
     static readonly QUERY_LABS : string = '/prj/lab/queryList';
     static readonly QUERY_TASK_LIST : string = '/prj/task/queryList';
     static readonly QUERY_TASK : string = '/prj/task/query';
+    static readonly QUERY_SEQUENCE : string = '/prj/task/sequence/query';
+    static readonly QUERY_SAMPLES_GROUP_BY_AGENT = '/prj/sample/group';
 
 }
