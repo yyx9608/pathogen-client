@@ -11,6 +11,9 @@ import {Group} from "../entity/response/Group";
 import {SampleInfo} from "../entity/response/SampleInfo";
 import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
 import {ExportRequest} from "../entity/request/ExportRequest";
+import {QueryResultRequest} from "../entity/request/QueryResultRequest";
+import {AnalysisResult} from "../entity/response/AnalysisResult";
+import {Pathogen} from "../entity/response/Pathogen";
 
 
 /**
@@ -58,8 +61,8 @@ function stopTask(params: object) {
   return axios.post('/prj/task/terminate', params)
 }
 
-function sampleResult(params: object) {
-  return axios.post('/prj/task/result/queryList', params)
+function sampleResult(params: QueryResultRequest) {
+  return axios.post<Response<AnalysisResult>[],Response<AnalysisResult[]>, QueryResultRequest>(RequestUrl.QUERY_RESULTS, params)
 }
 function sampleInfo(params: object) {
   return axios.post('/prj/sample/queryList', params)
@@ -93,7 +96,7 @@ function sampleSearch(params: object) {
 function taskSearch(params: object) {
   return axios.post('/prj/task/search', params)
 }
-function pathogenQuery(params: object) {
-  return axios.post('/prj/task/pathogen/query', params)
+function pathogenQuery(params: Pathogen) {
+  return axios.post<Response<Pathogen>,Response<Pathogen>,Pathogen>(RequestUrl.QUERY_PATHOGEN, params)
 }
 export default { queryLabs, login, querySeq, taskList, task, querySample, exportFile,  createTask, startTask ,stopTask , sampleResult ,sampleInfo ,sampleInfoGroupByAgent,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}

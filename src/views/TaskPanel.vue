@@ -32,7 +32,7 @@
           </el-dropdown>
         </div>
       </template>
-      <el-scrollbar max-height="500px">
+      <el-scrollbar max-height="400px">
         <el-descriptions
             direction="vertical"
             :column="4"
@@ -94,6 +94,8 @@
         </el-collapse-item>
       </el-collapse>
     </el-drawer>
+
+    <el-divider border-style="dashed" />
 
     <SamplePanel :sample-id='selectedSample'></SamplePanel>
 

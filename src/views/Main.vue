@@ -14,12 +14,15 @@
     </el-header>
     <el-container class="sub-container">
       <el-aside class="aside list" style="overflow: auto">
-        <ul v-infinite-scroll="loadMoreTask" class="infinite-list list "
-            :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
-          <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item" >{{ item.name }}</li>
-        </ul>
-        <p v-if="currentLab.taskPager.loading">加载中...</p>
-        <p v-if="!currentLab.taskPager.hasMore">我是有底线的</p>
+        <el-skeleton v-if="currentLab.taskPager.content.length === 0 && currentLab.taskPager.loading" :rows="10" animated />
+        <el-scrollbar>
+          <ul v-infinite-scroll="loadMoreTask" class="infinite-list list "
+              :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
+            <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item" >{{ item.name }}</li>
+          </ul>
+          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && currentLab.taskPager.loading">加载中...</p>
+          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && !currentLab.taskPager.hasMore">我是有底线的</p>
+        </el-scrollbar>
       </el-aside>
       <el-main>
         <TaskPanel v-if="currentTask.taskId !== ''" :task-id="currentTask.taskId"></TaskPanel>
@@ -102,7 +105,6 @@ function loadMoreTask() {
   if (!currentLab.value.taskPager.hasMore || currentLab.value.taskPager.loading){
     return;
   }
-  currentLab.value.taskPager.loading = true;
   let labId = currentLab.value.lab;
   let currentPage = currentLab.value.taskPager.currentPage+1;
   queryTaskList(labId, currentPage);
@@ -114,6 +116,7 @@ function loadMoreTask() {
  * @param pageNum 当前页码
  */
 function queryTaskList(labId :string, pageNum : number){
+  currentLab.value.taskPager.loading = true;
   let request = new TasksPagerRequest(labId);
   request.currentPage = pageNum;
   axios.taskList(request).then(res=>{

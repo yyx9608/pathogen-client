@@ -34,6 +34,7 @@ function loginBoke() {
   user.password = password.value;
   login(user).then(res=>{
     //current login user: res.result[0]
+    console.log(res)
     router.push({ name: 'main', replace : true });
   }).catch(e=>{
     console.error(e)
