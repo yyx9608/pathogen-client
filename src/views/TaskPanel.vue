@@ -9,9 +9,7 @@
         <div class="card-header">
           <span>{{ currentTask.task.name }}</span>
           <el-dropdown @command="handleCommand">
-            <el-icon>
-              <Tools />
-            </el-icon>
+            <el-icon><Menu /></el-icon>
             <template #dropdown>
               <el-dropdown-menu >
                 <el-dropdown-item icon="SwitchButton" :command='Command.START_TASK' :disabled='currentTask.task.status !== TaskStatus.INIT'>
@@ -25,6 +23,9 @@
                 </el-dropdown-item>
                 <el-dropdown-item icon="Document" divided :command='Command.SHOW_SAMPLES' :disabled='currentTask.task.status !== TaskStatus.COMPLETE'>
                   查看结果
+                </el-dropdown-item>
+                <el-dropdown-item icon="Link" :command='Command.EXPORT_RESULT' :disabled='currentTask.task.status !== TaskStatus.COMPLETE'>
+                  导出审核表
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -94,7 +95,7 @@
       </el-collapse>
     </el-drawer>
 
-    <SamplePanel></SamplePanel>
+    <SamplePanel :sample-id='selectedSample'></SamplePanel>
 
   </el-container>
 
@@ -112,9 +113,12 @@ import axios from "../dao/interface";
 import {Task} from "../entity/response/Task";
 import {SequenceData} from "../entity/response/SequenceData";
 import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
-import {ElMessage} from "element-plus";
-import {DataInSample} from "../entity/local/DataInSample";
+import {ElMessage, ElNotification} from "element-plus";
 import SamplePanel from "./SamplePanel.vue";
+import {ExportRequest} from "../entity/request/ExportRequest";
+import {DownloadEntry} from "../entity/enums/DownloadEntry";
+import {SampleInfo} from "../entity/response/SampleInfo";
+import {DownloadHelper} from "../utils/DownloadHelper";
 
 const props = defineProps<{ taskId : string }>();
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
@@ -127,9 +131,12 @@ class Command {
   static readonly TERMINATE_TASK : string = 'terminateTask';
   static readonly EDIT_TASK : string = 'editTask';
   static readonly SHOW_SAMPLES : string = 'showSamples';
+  static readonly EXPORT_RESULT : string = 'exportResult';
 }
 const fetchingSamples = ref<boolean>(false) as Ref<boolean>;
 const showDrawer = ref<boolean>(false) as Ref<boolean>;
+
+const selectedSample = ref<string>('') as Ref<string>;
 
 
 currentTask.value.taskId = props.taskId;
@@ -157,7 +164,27 @@ const handleCommand = (command: string | number | object) => {
     startTask();
   } else if (command === Command.TERMINATE_TASK){
     terminateTask();
+  } else if (command === Command.EXPORT_RESULT){
+    exportResult();
   }
+}
+
+function exportResult(){
+  let downloadRequest = new ExportRequest();
+  let sample = new SampleInfo();
+  sample.task = currentTask.value.taskId;
+  downloadRequest.entry = DownloadEntry.VERIFY;
+  downloadRequest.payload = sample;
+  axios.exportFile(downloadRequest).then(res=>{
+    DownloadHelper.download(document, res);
+  }).catch(e=>{
+    console.error(e)
+    ElNotification({
+      title: 'Error',
+      message: e.message,
+      type: 'error',
+    })
+  })
 }
 
 function editTask() {
@@ -173,10 +200,7 @@ function startTask() {
 }
 
 function selectSample(sampleId : string){
-  console.log('select sample -- ' + sampleId);
-  const currentTaskId = currentTask.value.taskId;
-  const selectedSampleId = sampleId;
-  // todo fetch result of selected sample
+  selectedSample.value = sampleId;
 }
 
 function showSamples() {
@@ -243,14 +267,5 @@ function queryTask(){
 
 <style scoped>
 
-.box-card {
-  width: 100%;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 </style>

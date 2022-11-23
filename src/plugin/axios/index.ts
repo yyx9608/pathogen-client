@@ -10,15 +10,33 @@ axios.defaults.baseURL = str;
 axios.interceptors.response.use(res => {
     if (res.data.code === ResponseEnum.LOGIN_FAIL){
         ElMessage.error(res.data.msg);
+        return Promise.reject(res.data.msg);
     } else if (res.data.code === ResponseEnum.LOGIN_SUCCESS){
         ElMessage.success(res.data.msg);
         store.commit("signIn",res.data.result[0]);
-        console.log(res.data)
         return res.data;
     } else if (res.data.code === ResponseEnum.NOT_LOGIN){
         store.commit("signOut");
+        return Promise.reject(res.data.msg);
+    } else if (res.data.code === ResponseEnum.FAIL ||
+        res.data.code === ResponseEnum.CONFIG_NOT_FOUND ||
+        res.data.code === ResponseEnum.DELETE_FAIL ||
+        res.data.code === ResponseEnum.INVALID_PARAM ||
+        res.data.code === ResponseEnum.INSERT_FAIL ||
+        res.data.code === ResponseEnum.MKDIR_TMP_FAIL ||
+        res.data.code === ResponseEnum.FILE_NOT_FOUND ||
+        res.data.code === ResponseEnum.QUERY_FAIL ||
+        res.data.code === ResponseEnum.SAMPLE_STATUS_ERROR ||
+        res.data.code === ResponseEnum.TASK_NOT_FOUND ||
+        res.data.code === ResponseEnum.USER_NOT_FOUND ||
+        res.data.code === ResponseEnum.SAMPLE_NOT_FOUND ||
+        res.data.code === ResponseEnum.UPDATE_FAIL ||
+        res.data.code === ResponseEnum.UPLOAD_FAIL){
+        return Promise.reject(res.data.msg);
     }
-    console.log(res.data[0])
+    if (res.headers['content-type']!.match('application/octet-stream')){
+        return res;
+    }
     return res.data[0];
 }, error => {
     return error;

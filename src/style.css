@@ -78,3 +78,13 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.box-card {
+  width: 100%;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

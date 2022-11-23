@@ -10,6 +10,7 @@ import {SequenceData} from "../entity/response/SequenceData";
 import {Group} from "../entity/response/Group";
 import {SampleInfo} from "../entity/response/SampleInfo";
 import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
+import {ExportRequest} from "../entity/request/ExportRequest";
 
 
 /**
@@ -34,6 +35,16 @@ export function login(params: User) {
 
 export function querySeq(params: SequenceData){
   return axios.post<Response<SequenceData>, Response<SequenceData>, SequenceData>(RequestUrl.QUERY_SEQUENCE, params);
+}
+
+export function querySample(params : SampleInfo){
+  return axios.post<Response<SampleInfo>, Response<SampleInfo>, SampleInfo>(RequestUrl.QUERY_SAMPLE, params);
+}
+
+export function exportFile(params : ExportRequest){
+  return axios.post(RequestUrl.EXPORT_FILE, params, {
+    responseType : 'blob'
+  });
 }
 
 export function createTask(params: object) {
@@ -85,4 +96,4 @@ function taskSearch(params: object) {
 function pathogenQuery(params: object) {
   return axios.post('/prj/task/pathogen/query', params)
 }
-export default { queryLabs, login, querySeq, taskList, task, createTask, startTask ,stopTask , sampleResult ,sampleInfo ,sampleInfoGroupByAgent,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}
+export default { queryLabs, login, querySeq, taskList, task, querySample, exportFile,  createTask, startTask ,stopTask , sampleResult ,sampleInfo ,sampleInfoGroupByAgent,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}

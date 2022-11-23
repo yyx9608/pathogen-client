@@ -1,9 +1,10 @@
 import {AnalysisResult} from "../response/AnalysisResult";
+import {SampleInfo} from "../response/SampleInfo";
 
 export class DataInSample {
 
-    taskId : string = '';
     sampleId : string = '';
+    sampleInfo : SampleInfo = new SampleInfo();
     results ?: AnalysisResult[] = [];
 
 }
