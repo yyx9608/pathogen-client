@@ -5,10 +5,13 @@ export class RequestUrl {
     static readonly QUERY_TASK_LIST : string = '/prj/task/queryList';
     static readonly QUERY_TASK : string = '/prj/task/query';
     static readonly QUERY_SEQUENCE : string = '/prj/task/sequence/query';
-    static readonly QUERY_SAMPLES_GROUP_BY_AGENT = '/prj/sample/group';
-    static readonly QUERY_SAMPLE = '/prj/sample/query';
-    static readonly EXPORT_FILE = '/prj/sample/export';
-    static readonly QUERY_RESULTS = '/prj/task/result/queryList';
-    static readonly QUERY_PATHOGEN = '/prj/task/pathogen/query';
+    static readonly QUERY_SAMPLES_GROUP_BY_AGENT : string = '/prj/sample/group';
+    static readonly QUERY_SAMPLE : string = '/prj/sample/query';
+    static readonly EXPORT_FILE : string = '/prj/sample/export';
+    static readonly QUERY_RESULTS : string = '/prj/task/result/queryList';
+    static readonly QUERY_PATHOGEN : string = '/prj/task/pathogen/query';
+    static readonly VERIFY_SAMPLE : string = '/prj/sample/verify';
+    static readonly GENERATE_REPORT : string = '/prj/task/result/report';
+    static readonly VERIFY_RESULT : string = '/prj/task/result/verify';
 
 }

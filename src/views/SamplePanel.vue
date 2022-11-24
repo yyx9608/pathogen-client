@@ -12,7 +12,14 @@
                 <el-icon><Menu /></el-icon>
                 <template #dropdown>
                   <el-dropdown-menu >
-                    <el-dropdown-item :command='Command.GENERATE_REPORT' disabled icon="DocumentAdd">
+                    <el-dropdown-item :command='Command.VERIFY'
+                                      :disabled='dataInSample.sampleInfo.status === SampleStatus.APPROVED || dataInSample.sampleInfo.status === SampleStatus.REPORTED
+                                      || dataInSample.sampleInfo.status === SampleStatus.RE_SEQ'
+                                      icon="Operation">
+                      审核
+                    </el-dropdown-item>
+                    <el-dropdown-item :command='Command.GENERATE_REPORT'
+                                      :disabled="dataInSample.sampleInfo.status !== SampleStatus.APPROVED || dataInSample.sampleInfo.reportFile !== undefined" icon="DocumentAdd">
                       生成报告
                     </el-dropdown-item>
                     <el-dropdown-item :command='Command.POST_REPORT' disabled icon="Message">
@@ -30,10 +37,11 @@
             <el-descriptions direction="vertical" :column="10" :title="dataInSample.sampleInfo.name" border size="small">
               <el-descriptions-item label="样本编号" span="2">{{ dataInSample.sampleInfo.sampleId }}</el-descriptions-item>
               <el-descriptions-item label="报告" span="8">
-                <div v-if="dataInSample.sampleInfo.reportFile !== undefined">{{ dataInSample.sampleInfo.reportFile }}</div>
-                <button v-if="dataInSample.sampleInfo.reportFile === undefined">生成报告</button>
+                {{ dataInSample.sampleInfo.reportFile }}
               </el-descriptions-item>
-              <el-descriptions-item label="样本状态" span="2">{{ dataInSample.sampleInfo.status }} </el-descriptions-item>
+              <el-descriptions-item label="样本状态" span="2">
+                {{ dataInSample.sampleInfo.status }}
+              </el-descriptions-item>
               <el-descriptions-item label="性别" span="2">{{ dataInSample.sampleInfo.sex }} </el-descriptions-item>
               <el-descriptions-item label="年龄" span="2">{{ dataInSample.sampleInfo.age }} </el-descriptions-item>
               <el-descriptions-item label="电话" span="2">{{ dataInSample.sampleInfo.phoneNum }} </el-descriptions-item>
@@ -77,13 +85,26 @@
           </el-scrollbar>
         </el-card>
       </el-container>
-      <el-container>
+
+      <el-divider border-style="dashed" content-position="center">检测结果</el-divider>
+
+      <el-container v-if="sampleId !== undefined && sampleId !== ''">
         <el-skeleton v-if="fetchingResult" :rows="10" animated />
-        <el-table :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen">
-          <el-table-column prop="sign" label="信号强度"/>
-          <el-table-column prop="status" label="报告区域"/>
-          <el-table-column prop="rawStatus" label="初始报告区域"/>
-          <el-table-column label="病原">
+        <el-table :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="small">
+          <el-table-column align="center" prop="sign" label="信号强度"/>
+          <el-table-column align="center" prop="status" label="报告区域">
+            <template #default="scope">
+              <el-select @change="verifyResult" v-if="editMode && (dataInSample.sampleInfo.status === SampleStatus.INIT || dataInSample.sampleInfo.status === SampleStatus.DISCUSS)" v-model="scope.row.status"  :placeholder="scope.row.status" size="small">
+                <el-option v-if="scope.row.status !== ResultStatus.Main" :key='ResultStatus.MAIN' :label='ResultStatus.MAIN' :value='[ResultStatus.MAIN,scope.$index]'/>
+                <el-option v-if="scope.row.status !== ResultStatus.GRAY" :key='ResultStatus.GRAY' :label='ResultStatus.GRAY' :value='[ResultStatus.GRAY,scope.$index]'/>
+                <el-option v-if="scope.row.status !== ResultStatus.BACKGROUND" :key='ResultStatus.BACKGROUND' :label='ResultStatus.BACKGROUND' :value='[ResultStatus.BACKGROUND,scope.$index]'/>
+                <el-option v-if="scope.row.status !== ResultStatus.HIDE" :key='ResultStatus.HIDE' :label='ResultStatus.HIDE' :value='[ResultStatus.HIDE,scope.$index]'/>
+              </el-select>
+              <div v-if="!editMode" >{{ scope.row.status }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="rawStatus" label="初始报告区域"/>
+          <el-table-column align="center" label="病原">
             <template #default="scope">
               <el-popover trigger="click" width="80%">
                 <PathogenPanel :pathogen-id="selectedPathogen"></PathogenPanel>
@@ -93,17 +114,38 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column prop="sampleType" label="样本类型" />
-          <el-table-column prop="reportTag" label="报告标签" />
-          <el-table-column prop="readsNums" label="reads" />
-          <el-table-column prop="copyNums" label="copy nums" />
-          <el-table-column prop="mappingReads" label="mapping reads" />
-          <el-table-column prop="q30Reads" label="q30 reads" />
-          <el-table-column prop="pathogensNums" label="该病原体同批检出数量" />
+          <el-table-column align="center" prop="sampleType" label="样本类型" />
+          <el-table-column align="center" prop="reportTag" label="报告标签" />
+          <el-table-column align="center" prop="readsNums" label="reads" />
+          <el-table-column align="center" prop="copyNums" label="copy nums" />
+          <el-table-column align="center" prop="mappingReads" label="mapping reads" />
+          <el-table-column align="center" prop="q30Reads" label="q30 reads" />
+          <el-table-column align="center" prop="pathogensNums" label="该病原体同批检出数量" />
         </el-table>
       </el-container>
     </el-container>
   </el-scrollbar>
+
+  <el-dialog v-model="showVerifyDialog" title="审核样本">
+    <el-form :model="verifyForm">
+      <el-form-item label="审核">
+        <el-select v-model="verifyForm.status" placeholder="选择样本审核结果">
+          <el-option v-if="dataInSample.sampleInfo.status !== SampleStatus.APPROVED" :label="SampleStatus.APPROVED" :value='SampleStatus.APPROVED' />
+          <el-option v-if="dataInSample.sampleInfo.status !== SampleStatus.DISCUSS" :label="SampleStatus.DISCUSS" :value="SampleStatus.DISCUSS" />
+          <el-option v-if="dataInSample.sampleInfo.status !== SampleStatus.RE_SEQ" :label="SampleStatus.RE_SEQ" :value="SampleStatus.RE_SEQ" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button :onclick="cancelVerify">取消</el-button>
+        <el-button type="primary" :onclick="verifySample" :disabled="verifyForm.status === undefined">
+          提交
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script lang="ts" setup>
@@ -119,12 +161,20 @@ import {DownloadEntry} from "../entity/enums/DownloadEntry";
 import {DownloadHelper} from "../utils/DownloadHelper";
 import {ElNotification} from "element-plus";
 import PathogenPanel from "./PathogenPanel.vue";
+import {SampleStatus} from "../entity/enums/SampleStatus";
+import {Loading} from "../utils/Loading";
+import {Notifications} from "../constants/Constants";
+import {ResultStatus} from "../entity/enums/ResultStatus";
 
 const props = defineProps<{ sampleId : string }>();
 const dataInSample = ref<DataInSample>(new DataInSample()) as Ref<DataInSample>;
 const fetchingSampleInfo = ref<boolean>(false) as Ref<boolean>;
 const fetchingResult = ref<boolean>(false) as Ref<boolean>;
 const selectedPathogen = ref<string|undefined>('') as Ref<string|undefined>;
+const showVerifyDialog = ref<boolean>(false) as Ref<boolean>;
+const verifyForm = ref<SampleInfo>(new SampleInfo()) as Ref<SampleInfo>;
+
+const editMode = ref<boolean>(true) as Ref<boolean>;
 
 class Command {
   static readonly GENERATE_REPORT : string = 'generateReport';
@@ -136,7 +186,96 @@ class Command {
 const handleCommand = (command: string | number | object) => {
   if (command === Command.EXPORT_REPORT){
     exportReport();
+  } else if (command === Command.VERIFY){
+    showVerifyDialog.value = true;
+  } else if (command === Command.GENERATE_REPORT){
+    generateReport();
   }
+}
+
+function verifyResult(val : any[]){
+  let status : ResultStatus = val[0];
+  let index : number = val[1];
+  let result : AnalysisResult = dataInSample.value.results![index];
+  const request : AnalysisResult = new AnalysisResult();
+  request.id = result.id;
+  request.status = status;
+  axios.resultVerify(request).then(res=>{
+    dataInSample.value.results![index].status = status;
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: Notifications.SUCCESS,
+      type: 'success',
+    });
+  }).catch(e=>{
+    dataInSample.value.results![index].status = dataInSample.value.results![index].rawStatus
+    ElNotification({
+      title: Notifications.FAIL,
+      message: Notifications.FAIL,
+      type: 'error',
+    });
+  }).finally(()=>{
+
+  });
+}
+
+function generateReport() {
+  Loading.showSimpleLoading();
+  const sampleIds = [dataInSample.value.sampleId];
+  axios.generateReport(sampleIds).then(res=>{
+    let report = undefined;
+    res.result.forEach(sampleInfo => {
+      if (sampleInfo.id === dataInSample.value.sampleId){
+        report = sampleInfo.reportFile;
+      }
+    })
+    if (report !== undefined){
+      dataInSample.value.sampleInfo.reportFile = report;
+      ElNotification({
+        title: Notifications.SUCCESS,
+        message: Notifications.SUCCESS,
+        type: 'success',
+      });
+    } else {
+      ElNotification({
+        title: Notifications.FAIL,
+        message: Notifications.FAIL,
+        type: 'error',
+      });
+    }
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: e.message,
+      type: 'error',
+    });
+  }).finally(()=>{
+    Loading.hideSimpleLoading();
+  });
+}
+
+function cancelVerify() {
+  showVerifyDialog.value = false;
+}
+
+function verifySample() {
+  showVerifyDialog.value = false;
+  verifyForm.value.id = props.sampleId;
+  axios.sampleVerify(verifyForm.value).then(res=>{
+    dataInSample.value.sampleInfo.status = verifyForm.value.status;
+    verifyForm.value = new SampleInfo();
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: res.msg,
+      type: 'success',
+    })
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: e.message,
+      type: 'error',
+    })
+  })
 }
 
 function exportReport(){
@@ -150,7 +289,7 @@ function exportReport(){
   }).catch(e=>{
     console.error(e)
     ElNotification({
-      title: 'Error',
+      title: Notifications.FAIL,
       message: e.message,
       type: 'error',
     })

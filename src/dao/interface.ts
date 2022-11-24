@@ -72,15 +72,15 @@ function sampleInfoGroupByAgent(params: QuerySampleInfoRequest){
   return axios.post<Response<Group<string, SampleInfo[]>[]>,Response<Group<string, SampleInfo[]>[]>, QuerySampleInfoRequest>(RequestUrl.QUERY_SAMPLES_GROUP_BY_AGENT, params);
 }
 
-function generateRepo(params: object) {
-  return axios.post( '/prj/task/result/report', params)
+function generateReport(params: string[]) {
+  return axios.post<Response<SampleInfo[]>, Response<SampleInfo[]>, string[]>(RequestUrl.GENERATE_REPORT, params)
 }
 
-function sampleVerify(params: object) {
-  return axios.post( '/prj/sample/verify', params)
+function sampleVerify(params: SampleInfo) {
+  return axios.post<Response<boolean>, Response<boolean>, SampleInfo>( RequestUrl.VERIFY_SAMPLE, params)
 }
-function resultVerify(params: object) {
-  return axios.post( '/prj/task/result/verify', params)
+function resultVerify(params: AnalysisResult) {
+  return axios.post<Response<any>, Response<any>, AnalysisResult>( RequestUrl.VERIFY_RESULT, params);
 }
 // 上传样本信息
 function submitUpload(params: object){
@@ -99,4 +99,8 @@ function taskSearch(params: object) {
 function pathogenQuery(params: Pathogen) {
   return axios.post<Response<Pathogen>,Response<Pathogen>,Pathogen>(RequestUrl.QUERY_PATHOGEN, params)
 }
-export default { queryLabs, login, querySeq, taskList, task, querySample, exportFile,  createTask, startTask ,stopTask , sampleResult ,sampleInfo ,sampleInfoGroupByAgent,generateRepo ,sampleVerify ,resultVerify ,submitUpload,resultSearch,sampleSearch,taskSearch,pathogenQuery}
+export default { queryLabs, login, querySeq, taskList, task,
+  querySample, exportFile, createTask, startTask ,stopTask,
+  sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
+  sampleVerify, resultVerify, submitUpload, resultSearch,
+  sampleSearch, taskSearch, pathogenQuery}

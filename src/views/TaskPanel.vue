@@ -84,7 +84,7 @@
       </el-scrollbar>
     </el-card>
 
-    <el-drawer v-model="showDrawer" title="I am the title" :with-header="false">
+    <el-drawer v-model="showDrawer" title="样本列表" :with-header="true">
       <el-skeleton v-if="fetchingSamples" :rows="10" animated />
       <el-collapse v-if="!fetchingSamples" accordion>
         <el-collapse-item v-for='item in currentTask.samples' :title='item.tag'>
@@ -95,7 +95,7 @@
       </el-collapse>
     </el-drawer>
 
-    <el-divider border-style="dashed" />
+    <el-divider v-if="selectedSample !== undefined" border-style="dashed" content-position="center">样本信息</el-divider>
 
     <SamplePanel :sample-id='selectedSample'></SamplePanel>
 
@@ -121,6 +121,7 @@ import {ExportRequest} from "../entity/request/ExportRequest";
 import {DownloadEntry} from "../entity/enums/DownloadEntry";
 import {SampleInfo} from "../entity/response/SampleInfo";
 import {DownloadHelper} from "../utils/DownloadHelper";
+import {Notifications} from "../constants/Constants";
 
 const props = defineProps<{ taskId : string }>();
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
@@ -182,7 +183,7 @@ function exportResult(){
   }).catch(e=>{
     console.error(e)
     ElNotification({
-      title: 'Error',
+      title: Notifications.FAIL,
       message: e.message,
       type: 'error',
     })
@@ -203,6 +204,7 @@ function startTask() {
 
 function selectSample(sampleId : string){
   selectedSample.value = sampleId;
+  showDrawer.value = false;
 }
 
 function showSamples() {
