@@ -19,7 +19,7 @@ export class AnalysisResult extends BaseEntity {
     clinicalInformation ?: string;
     reportTag ?: string;
     readsNums ?: string;
-    copyMums ?: string; //后台变量写错了应该是copyNums
+    copyNums ?: string; //后台变量写错了应该是copyNums
     mappingReads ?: string;
     q30Reads ?: string;
     pathogensNums ?: string;

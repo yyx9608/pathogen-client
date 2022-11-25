@@ -14,6 +14,7 @@ import {ExportRequest} from "../entity/request/ExportRequest";
 import {QueryResultRequest} from "../entity/request/QueryResultRequest";
 import {AnalysisResult} from "../entity/response/AnalysisResult";
 import {Pathogen} from "../entity/response/Pathogen";
+import {SearchRequest} from "../entity/request/SearchRequest";
 
 
 /**
@@ -82,6 +83,11 @@ function sampleVerify(params: SampleInfo) {
 function resultVerify(params: AnalysisResult) {
   return axios.post<Response<any>, Response<any>, AnalysisResult>( RequestUrl.VERIFY_RESULT, params);
 }
+
+function addResult(params : AnalysisResult) {
+  return axios.post<Response<string>, Response<string>, AnalysisResult>(RequestUrl.INSERT_ANALYSIS_RESULT, params);
+}
+
 // 上传样本信息
 function submitUpload(params: object){
   return axios.post( 'http://1486641sd0.iask.in:35485/upload/', params)
@@ -99,8 +105,13 @@ function taskSearch(params: object) {
 function pathogenQuery(params: Pathogen) {
   return axios.post<Response<Pathogen>,Response<Pathogen>,Pathogen>(RequestUrl.QUERY_PATHOGEN, params)
 }
+
+function pathogenSearch(params : SearchRequest) {
+  return axios.post<Response<Pathogen[]>, Response<Pathogen[]>, SearchRequest>(RequestUrl.SEARCH_PATHOGEN, params);
+}
+
 export default { queryLabs, login, querySeq, taskList, task,
   querySample, exportFile, createTask, startTask ,stopTask,
   sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
   sampleVerify, resultVerify, submitUpload, resultSearch,
-  sampleSearch, taskSearch, pathogenQuery}
+  sampleSearch, taskSearch, pathogenQuery, pathogenSearch, addResult}

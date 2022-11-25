@@ -95,9 +95,9 @@
       </el-collapse>
     </el-drawer>
 
-    <el-divider v-if="selectedSample !== undefined" border-style="dashed" content-position="center">样本信息</el-divider>
+    <el-divider v-if="selectedSample !== undefined && selectedSample !== ''" border-style="dashed" content-position="center">样本信息</el-divider>
 
-    <SamplePanel :sample-id='selectedSample'></SamplePanel>
+    <SamplePanel v-if="selectedSample !== undefined && selectedSample !== ''" :sample-id='selectedSample'></SamplePanel>
 
   </el-container>
 
@@ -155,6 +155,9 @@ watch(
         sequenceData.value = new SequenceData();
         queryTask();
       }
+    }, {
+      immediate : true,
+      deep : true,
     }
 )
 
@@ -254,11 +257,6 @@ function queryTask(){
   task.id = currentTask.value.taskId;
   axios.task(task).then(res=>{
     currentTask.value.task = res.result;
-    console.log(res.result.status === TaskStatus.COMPLETE);
-    console.log(res.result.status === TaskStatus.STOP);
-    console.log(res.result.status === TaskStatus.RUNNING);
-    console.log(res.result.status === TaskStatus.ERROR);
-    console.log(res.result.status === TaskStatus.INIT);
   }).catch(e=>{
     error.value = true;
     console.error(e)

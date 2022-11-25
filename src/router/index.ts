@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import Main from '../views/Main.vue';
 import Login from '../views/Login.vue';
 import entry from '../views/Entry.vue';
+import Search from '../views/Search.vue';
+import UserConfig from '../views/UserConfig.vue';
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
@@ -19,6 +21,8 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       { path: 'main', name: 'main', component: Main },
       { path: 'login', name: 'login', component: Login },
+      { path: 'search', name: 'search', component: Search },
+      { path: 'config', name: 'config', component: UserConfig },
     ],
   },
 ];

@@ -2,6 +2,8 @@ import axios from 'axios';
 import {ElMessage, ElNotification} from 'element-plus';
 import {ResponseEnum} from "../../entity/enums/ResponseEnum";
 import store from '../../store/index';
+import {Notifications} from "../../constants/Constants";
+import router from "../../router";
 
 
 const str = process.env.NODE_ENV === 'development' ? '/devServer' : 'http://1486641sd0.iask.in:35485'
@@ -17,6 +19,22 @@ axios.interceptors.response.use(res => {
         return res.data;
     } else if (res.data.code === ResponseEnum.NOT_LOGIN){
         store.commit("signOut");
+        const notification = ElNotification({
+            title: Notifications.NOT_LOGIN,
+            message: Notifications.TO_LOGIN,
+            type: 'error',
+            duration : 0,
+            onClick() {
+                notification.close();
+                router.push({ name: 'login', replace : true }).then((res)=>{
+
+                }).catch(e=>{
+
+                }).finally(()=>{
+
+                });
+            }
+        });
         return Promise.reject(res.data.msg);
     } else if (res.data.code === ResponseEnum.FAIL ||
         res.data.code === ResponseEnum.CONFIG_NOT_FOUND ||

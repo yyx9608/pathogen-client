@@ -88,20 +88,11 @@
 
       <el-divider border-style="dashed" content-position="center">检测结果</el-divider>
 
-      <el-container v-if="sampleId !== undefined && sampleId !== ''">
+      <el-container direction="vertical" v-if="sampleId !== undefined && sampleId !== ''">
         <el-skeleton v-if="fetchingResult" :rows="10" animated />
-        <el-table :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="small">
+        <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="small">
           <el-table-column align="center" prop="sign" label="信号强度"/>
           <el-table-column align="center" prop="status" label="报告区域">
-            <template #default="scope">
-              <el-select @change="verifyResult" v-if="editMode && (dataInSample.sampleInfo.status === SampleStatus.INIT || dataInSample.sampleInfo.status === SampleStatus.DISCUSS)" v-model="scope.row.status"  :placeholder="scope.row.status" size="small">
-                <el-option v-if="scope.row.status !== ResultStatus.Main" :key='ResultStatus.MAIN' :label='ResultStatus.MAIN' :value='[ResultStatus.MAIN,scope.$index]'/>
-                <el-option v-if="scope.row.status !== ResultStatus.GRAY" :key='ResultStatus.GRAY' :label='ResultStatus.GRAY' :value='[ResultStatus.GRAY,scope.$index]'/>
-                <el-option v-if="scope.row.status !== ResultStatus.BACKGROUND" :key='ResultStatus.BACKGROUND' :label='ResultStatus.BACKGROUND' :value='[ResultStatus.BACKGROUND,scope.$index]'/>
-                <el-option v-if="scope.row.status !== ResultStatus.HIDE" :key='ResultStatus.HIDE' :label='ResultStatus.HIDE' :value='[ResultStatus.HIDE,scope.$index]'/>
-              </el-select>
-              <div v-if="!editMode" >{{ scope.row.status }}</div>
-            </template>
           </el-table-column>
           <el-table-column align="center" prop="rawStatus" label="初始报告区域"/>
           <el-table-column align="center" label="病原">
@@ -109,7 +100,8 @@
               <el-popover trigger="click" width="80%">
                 <PathogenPanel :pathogen-id="selectedPathogen"></PathogenPanel>
                 <template #reference>
-                  {{ scope.row.pathogenId }}
+                  {{ (pathogenContentMap.get(scope.row.pathogenId) === undefined || pathogenContentMap.get(scope.row.pathogenId).id !== scope.row.pathogenId)
+                    ? '病原id:' + scope.row.pathogenId : pathogenContentMap.get(scope.row.pathogenId).name }}
                 </template>
               </el-popover>
             </template>
@@ -121,10 +113,29 @@
           <el-table-column align="center" prop="mappingReads" label="mapping reads" />
           <el-table-column align="center" prop="q30Reads" label="q30 reads" />
           <el-table-column align="center" prop="pathogensNums" label="该病原体同批检出数量" />
+          <el-table-column align="center" fixed="right" label="操作" width="120">
+            <template #default="scope">
+              <el-container style="justify-content: center">
+                <el-button-group>
+                  <el-button :disabled="dataInSample.sampleInfo && (dataInSample.sampleInfo.status === SampleStatus.APPROVED ||
+                  dataInSample.sampleInfo.status === SampleStatus.REPORTED ||
+                  dataInSample.sampleInfo.status === SampleStatus.RE_SEQ)"
+                             type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
+                  <el-button :disabled="dataInSample.sampleInfo && (dataInSample.sampleInfo.status === SampleStatus.APPROVED ||
+                  dataInSample.sampleInfo.status === SampleStatus.REPORTED ||
+                  dataInSample.sampleInfo.status === SampleStatus.RE_SEQ)" type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
+                </el-button-group>
+              </el-container>
+            </template>
+          </el-table-column>
         </el-table>
       </el-container>
     </el-container>
   </el-scrollbar>
+
+  <el-drawer v-model="showEditDialog" size="100%" :title="selectedResult.name">
+    <Result :action="resultAction" :analysis-result="selectedResult" @insert="insertResult" @update="updateResult" @exit="closeResult"/>
+  </el-drawer>
 
   <el-dialog v-model="showVerifyDialog" title="审核样本">
     <el-form :model="verifyForm">
@@ -165,16 +176,24 @@ import {SampleStatus} from "../entity/enums/SampleStatus";
 import {Loading} from "../utils/Loading";
 import {Notifications} from "../constants/Constants";
 import {ResultStatus} from "../entity/enums/ResultStatus";
+import Result from "./Result.vue";
+import {Action} from "../entity/enums/local/Action";
+import {Pathogen} from "../entity/response/Pathogen";
+import store from "../store";
 
 const props = defineProps<{ sampleId : string }>();
 const dataInSample = ref<DataInSample>(new DataInSample()) as Ref<DataInSample>;
 const fetchingSampleInfo = ref<boolean>(false) as Ref<boolean>;
 const fetchingResult = ref<boolean>(false) as Ref<boolean>;
-const selectedPathogen = ref<string|undefined>('') as Ref<string|undefined>;
+const selectedPathogen = ref<string>('') as Ref<string>;
+const pathogenContentMap = ref<Map<string,Pathogen>>(store.getters.getPathogenMap) as Ref<Map<string,Pathogen>>;
+
 const showVerifyDialog = ref<boolean>(false) as Ref<boolean>;
 const verifyForm = ref<SampleInfo>(new SampleInfo()) as Ref<SampleInfo>;
 
-const editMode = ref<boolean>(true) as Ref<boolean>;
+const showEditDialog = ref<boolean>(false) as Ref<boolean>;
+const selectedResult = ref<AnalysisResult>(new AnalysisResult()) as Ref<AnalysisResult>;
+const resultAction = ref<Action>(Action.VIEW) as Ref<Action>;
 
 class Command {
   static readonly GENERATE_REPORT : string = 'generateReport';
@@ -193,30 +212,39 @@ const handleCommand = (command: string | number | object) => {
   }
 }
 
-function verifyResult(val : any[]){
-  let status : ResultStatus = val[0];
-  let index : number = val[1];
-  let result : AnalysisResult = dataInSample.value.results![index];
-  const request : AnalysisResult = new AnalysisResult();
-  request.id = result.id;
-  request.status = status;
-  axios.resultVerify(request).then(res=>{
-    dataInSample.value.results![index].status = status;
-    ElNotification({
-      title: Notifications.SUCCESS,
-      message: Notifications.SUCCESS,
-      type: 'success',
-    });
-  }).catch(e=>{
-    dataInSample.value.results![index].status = dataInSample.value.results![index].rawStatus
-    ElNotification({
-      title: Notifications.FAIL,
-      message: Notifications.FAIL,
-      type: 'error',
-    });
-  }).finally(()=>{
+function insertResult(r: AnalysisResult) {
+  console.log('insertResult ' +r);
+  dataInSample.value.results!.unshift(r);
+}
 
-  });
+function updateResult(r : AnalysisResult) {
+  console.log('updateResult ' +r);
+  dataInSample.value.results!.forEach(value => {
+    if (value.id === r.id){
+      value.status = r.status;
+    }
+  })
+}
+
+function closeResult() {
+  console.log('exit');
+  showEditDialog.value = false;
+}
+
+function rowKey(row : any){
+  return row.id;
+}
+
+function editRow(index : number) {
+  selectedResult.value = Object.assign(new AnalysisResult(), dataInSample.value.results![index]);
+  resultAction.value = Action.EDIT;
+  showEditDialog.value = true;
+}
+
+function copyRow(index : number){
+  selectedResult.value = Object.assign(new AnalysisResult(),dataInSample.value.results![index]);
+  resultAction.value = Action.INSERT;
+  showEditDialog.value = true;
 }
 
 function generateReport() {
@@ -305,13 +333,32 @@ watch(
         dataInSample.value = nis;
         querySampleInfo();
       }
+    }, {
+      immediate : true,
+      deep : true,
     }
 )
 
 function showPathogen(row : AnalysisResult, column : any, cell : any, event : any){
   if (column.label === '病原'){
-    selectedPathogen.value = row.pathogenId;
+    selectedPathogen.value = row.pathogenId === undefined ? '' : row.pathogenId;
+    queryPathogen(selectedPathogen.value);
   }
+}
+
+function queryPathogen(id : string){
+  if (pathogenContentMap.value.has(id)){
+    return;
+  }
+  const pathogen = new Pathogen();
+  pathogen.id = id;
+  return axios.pathogenQuery(pathogen).then(res=>{
+    if (res.result.id !== undefined){
+      pathogenContentMap.value.set(res.result.id, res.result);
+    }
+  }).catch(e=>{
+    console.error(e)
+  });
 }
 
 function queryResult(){
@@ -324,6 +371,11 @@ function queryResult(){
   request.pageSize = 100;
   axios.sampleResult(request).then(res=>{
     dataInSample.value.results = res.result;
+    res.result.forEach(value => {
+      if (value.pathogenId != null) {
+        queryPathogen(value.pathogenId);
+      }
+    });
   }).catch(e=>{
     console.error(e)
   }).finally(()=>{
@@ -348,5 +400,6 @@ function querySampleInfo() {
 </script>
 
 <style scoped>
+
 
 </style>

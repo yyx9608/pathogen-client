@@ -13,5 +13,7 @@ export class RequestUrl {
     static readonly VERIFY_SAMPLE : string = '/prj/sample/verify';
     static readonly GENERATE_REPORT : string = '/prj/task/result/report';
     static readonly VERIFY_RESULT : string = '/prj/task/result/verify';
+    static readonly SEARCH_PATHOGEN : string = '/prj/task/pathogen/search';
+    static readonly INSERT_ANALYSIS_RESULT : string = '/prj/task/result/insert';
 
 }

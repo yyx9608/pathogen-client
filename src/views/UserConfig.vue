@@ -1,10 +1,11 @@
 <template>
 
-  <div>new task</div>
+  <div>user config</div>
 
 </template>
 
 <script lang="ts" setup>
+
 
 </script>
 

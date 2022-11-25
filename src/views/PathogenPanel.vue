@@ -41,6 +41,7 @@
 import {Ref, ref, watch} from "vue";
 import {Pathogen} from "../entity/response/Pathogen";
 import axios from "../dao/interface";
+import store from "../store";
 
 const props = defineProps<{ pathogenId : string }>();
 const pathogenEntity = ref<Pathogen>(new Pathogen()) as Ref<Pathogen>;
@@ -49,27 +50,37 @@ const fetchingPathogen = ref<boolean>(false) as Ref<boolean>;
 watch(
     () => props.pathogenId,
     (newValue, oldValue) => {
-      if (newValue !== oldValue){
+      if (newValue !== oldValue && newValue !== ''){
         pathogenEntity.value = new Pathogen();
         pathogenEntity.value.id = newValue;
         queryPathogen();
       }
+    },{
+      immediate : true,
+      deep : true,
     }
 )
 
 function queryPathogen(){
-  fetchingPathogen.value = true;
-  const request = new Pathogen();
-  request.id = pathogenEntity.value.id;
-  axios.pathogenQuery(request).then(res=>{
-    if (request.id === res.result.id){
-      pathogenEntity.value = res.result;
-    }
-  }).catch(e=>{
-    console.error(e)
-  }).finally(()=>{
-    fetchingPathogen.value = false;
-  })
+  if (store.getters.getPathogenMap.has(pathogenEntity.value.id)){
+    pathogenEntity.value = store.getters.getPathogenMap.get(pathogenEntity.value.id);
+  } else {
+    fetchingPathogen.value = true;
+    const pathogen = new Pathogen();
+    pathogen.id = pathogenEntity.value.id;
+    return axios.pathogenQuery(pathogen).then(res=>{
+      if (res.result.id !== undefined){
+        store.getters.getPathogenMap.set(res.result.id, res.result);
+        if (pathogenEntity.value.id === res.result.id) {
+          pathogenEntity.value = res.result;
+        }
+      }
+    }).catch(e=>{
+      console.error(e)
+    }).finally(()=>{
+      fetchingPathogen.value = false;
+    })
+  }
 }
 
 </script>

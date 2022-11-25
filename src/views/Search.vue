@@ -1,11 +1,9 @@
 <template>
-
+  <div>search</div>
 </template>
 
-<script>
-export default {
-  name: "Search"
-}
+<script lang="ts" setup>
+
 </script>
 
 <style scoped>

@@ -88,3 +88,31 @@ button:focus-visible {
   justify-content: space-between;
   align-items: center;
 }
+
+.max-w {
+  width: 100%;
+}
+
+.max-h {
+  height: 100%;
+}
+
+.half-w {
+  width: 50%;
+}
+
+.margin10 {
+  margin: 10px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-left-10 {
+  margin-left: 10px;
+}
+
+.form-item {
+  max-width: 500px;
+}
