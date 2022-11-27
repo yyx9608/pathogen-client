@@ -36,8 +36,7 @@
 <script lang="ts" setup>
 
 import {Search} from "@element-plus/icons-vue";
-import {ref} from "@vue/reactivity";
-import {Ref} from "vue";
+import {ref, Ref} from "vue";
 import Header from "./widgets/Header.vue";
 
 enum SearchTarget {
