@@ -8,6 +8,7 @@ import router from "../../router";
 
 const str = process.env.NODE_ENV === 'development' ? '/devServer' : 'http://1486641sd0.iask.in:35485'
 axios.defaults.baseURL = str;
+axios.defaults.withCredentials = true;
 //响应拦截
 axios.interceptors.response.use(res => {
     if (res.data.code === ResponseEnum.LOGIN_FAIL){

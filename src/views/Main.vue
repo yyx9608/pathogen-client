@@ -1,21 +1,19 @@
 <template>
   <el-container class="main-container">
-
     <el-header class="header">
-      <el-menu
-          class="el-menu-demo"
-          mode="horizontal"
-          :ellipsis="false">
-        <el-sub-menu index="1" :disabled="labs.content.length < 1">
-          <template #title>{{ selectedLab }}</template>
-          <el-menu-item @click="onLabSelect(item.id, item.name)" v-for="(item,index) in labs.content" :key="item.id" :value="item.id" :label="item.name" :id="item.id" index="1-{{String(index)}}">{{item.name}}</el-menu-item>
-        </el-sub-menu>
-      </el-menu>
+      <Header/>
     </el-header>
     <el-container class="sub-container">
-      <el-aside class="aside list" style="overflow: auto">
-        <el-skeleton v-if="currentLab.taskPager.content.length === 0 && currentLab.taskPager.loading" :rows="10" animated />
-        <el-scrollbar>
+      <el-aside class="aside list" style="overflow: auto;">
+        <el-menu mode="horizontal" style="height: 50px; justify-content: center; align-items: center" :ellipsis="false">
+          <el-sub-menu index="1" :disabled="labs.content.length < 1">
+            <template #title>{{ selectedLab }}</template>
+            <el-menu-item @click="onLabSelect(item.id, item.name)" v-for="(item,index) in labs.content" :key="item.id" :value="item.id" :label="item.name" :id="item.id" index="1-{{String(index)}}">{{item.name}}</el-menu-item>
+          </el-sub-menu>
+          <el-icon v-if="selectedLab !== Notifications.SELECT_LAB" class="max-h" :onclick="addTask"><CirclePlus /></el-icon>
+        </el-menu>
+        <el-skeleton v-if="currentLab.taskPager.content.length === 0 && currentLab.taskPager.loading" :rows="5" animated />
+        <el-scrollbar v-if="currentLab.taskPager.content.length > 0"  class="tasks">
           <ul v-infinite-scroll="loadMoreTask" class="infinite-list list "
               :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
             <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item" >{{ item.name }}</li>
@@ -29,6 +27,15 @@
         <el-empty v-if="currentTask.taskId === ''" description="empty view" />
       </el-main>
     </el-container>
+    <el-dialog v-model="showAddTask">
+      <TaskViewer ref="taskViewer" :action="Action.INSERT" @onTaskCreate="onTaskCreated" :create-task-request="request"/>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="showAddTask = false">{{ Notifications.CANCEL }}</el-button>
+        <el-button type="primary" @click="submitNewTask">{{ Notifications.CONFIRM }}</el-button>
+      </span>
+      </template>
+    </el-dialog>
   </el-container>
 
 </template>
@@ -48,24 +55,35 @@ import {SampleInfo} from "../entity/response/SampleInfo";
 import TaskPanel from "./TaskPanel.vue";
 import {DataInLab} from "../entity/local/DataInLab";
 import {DataInTask} from "../entity/local/DataInTask";
+import Header from "./widgets/Header.vue";
+import {Notifications} from '../constants/Constants';
+import NewTask from "./TaskViewer.vue";
+import TaskViewer from "./TaskViewer.vue";
+import {Action} from "../entity/enums/local/Action";
+import {CreateTaskRequest} from '../entity/request/CreateTaskRequest';
 
 /**
  * list of labs
  */
 const labs = ref<Pager<Lab>>(new Pager<Lab>()) as Ref<Pager<Lab>>;
-const selectedLab = ref<string>("选择实验室") as Ref<string>;
+const selectedLab = ref<string>(Notifications.SELECT_LAB) as Ref<string>;
 
 /**
  * data in lab
  */
 
 const currentLab = ref<DataInLab>(new DataInLab()) as Ref<DataInLab>;
+const request = new CreateTaskRequest();
 
 /**
  * data in task
  */
 
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
+
+const showAddTask = ref<boolean>(false) as Ref<boolean>;
+const taskViewer = ref();
+
 
 onMounted(() => {
   queryLabs()
@@ -84,11 +102,25 @@ function queryLabs() {
   })
 }
 
+function addTask() {
+  showAddTask.value = true;
+}
+
+function onTaskCreated(createTaskRequest: CreateTaskRequest) {
+  currentLab.value.taskPager.content.unshift(createTaskRequest.task);
+  showAddTask.value = false;
+}
+
+function submitNewTask() {
+  taskViewer.value.submit();
+}
+
 function onLabSelect(labId : string, labName : string) {
   if (labId === currentLab.value.lab){
     return;
   }
   selectedLab.value = labName;
+  request.task.lab = labId;
   currentLab.value.lab = labId;
   //clear task array
   currentLab.value.taskPager = new Pager<Task>();
@@ -166,6 +198,14 @@ function onTaskSelect(taskId : string){
   height: calc(100% - 50px);
 }
 
+.add-task {
+  width: 130px;
+}
+
+.tasks {
+  height: calc(100% - 100px);
+}
+
 .aside {
   width: 200px;
   margin-top: 50px;
@@ -185,10 +225,6 @@ function onTaskSelect(taskId : string){
   padding: 0;
   margin: 0;
   list-style: none;
-}
-
-.header {
-  height: 50px;
 }
 
 </style>

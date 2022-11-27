@@ -116,3 +116,12 @@ button:focus-visible {
 .form-item {
   max-width: 500px;
 }
+
+.header {
+  height: 50px;
+}
+
+.justify-content-center {
+  display: flex;
+  justify-content: center;
+}

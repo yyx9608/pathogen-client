@@ -15,5 +15,9 @@ export class RequestUrl {
     static readonly VERIFY_RESULT : string = '/prj/task/result/verify';
     static readonly SEARCH_PATHOGEN : string = '/prj/task/pathogen/search';
     static readonly INSERT_ANALYSIS_RESULT : string = '/prj/task/result/insert';
+    static readonly UPLOAD : string = '/upload/';
+    static readonly CREATE_TASK : string = '/prj/task/insert';
+    static readonly START_TASK : string = '/prj/task/start';
+    static readonly STOP_TASK : string = '/prj/task/terminate';
 
 }

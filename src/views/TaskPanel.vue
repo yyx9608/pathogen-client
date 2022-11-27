@@ -12,7 +12,7 @@
             <el-icon><Menu /></el-icon>
             <template #dropdown>
               <el-dropdown-menu >
-                <el-dropdown-item icon="SwitchButton" :command='Command.START_TASK' :disabled='currentTask.task.status !== TaskStatus.INIT'>
+                <el-dropdown-item icon="SwitchButton" :command='Command.START_TASK' :disabled='currentTask.task.status !== TaskStatus.INIT && currentTask.task.status !== TaskStatus.STOP'>
                   启动任务
                 </el-dropdown-item>
                 <el-dropdown-item icon="Warning" :command='Command.TERMINATE_TASK' :disabled='currentTask.task.status !== TaskStatus.RUNNING'>
@@ -24,7 +24,7 @@
                 <el-dropdown-item icon="Document" divided :command='Command.SHOW_SAMPLES' :disabled='currentTask.task.status !== TaskStatus.COMPLETE'>
                   查看结果
                 </el-dropdown-item>
-                <el-dropdown-item icon="Link" :command='Command.EXPORT_RESULT' :disabled='currentTask.task.status !== TaskStatus.COMPLETE'>
+                <el-dropdown-item icon="Link" :command='Command.EXPORT_RESULT' :disabled='downloading || currentTask.task.status !== TaskStatus.COMPLETE'>
                   导出审核表
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -40,8 +40,11 @@
           <el-descriptions-item label="任务名" span="2">
             {{currentTask.task.name}}
           </el-descriptions-item>
-          <el-descriptions-item label="任务状态" span="2">
+          <el-descriptions-item label="任务状态" span="1">
             {{ currentTask.task.status }}
+          </el-descriptions-item>
+          <el-descriptions-item label="当前步骤" span="1">
+            {{ currentTask.task.step }}
           </el-descriptions-item>
           <el-descriptions-item label="测序数据" span="4">
             <el-popover placement="bottom" trigger="hover" width="50%" v-show="showSequence()">
@@ -138,8 +141,11 @@ class Command {
 }
 const fetchingSamples = ref<boolean>(false) as Ref<boolean>;
 const showDrawer = ref<boolean>(false) as Ref<boolean>;
+const downloading = ref<boolean>(false) as Ref<boolean>;
 
 const selectedSample = ref<string>('') as Ref<string>;
+
+
 
 
 currentTask.value.taskId = props.taskId;
@@ -176,6 +182,7 @@ const handleCommand = (command: string | number | object) => {
 }
 
 function exportResult(){
+  downloading.value = true;
   let downloadRequest = new ExportRequest();
   let sample = new SampleInfo();
   sample.task = currentTask.value.taskId;
@@ -190,6 +197,8 @@ function exportResult(){
       message: e.message,
       type: 'error',
     })
+  }).finally(()=>{
+    downloading.value = false;
   })
 }
 
@@ -199,10 +208,48 @@ function editTask() {
 
 function terminateTask() {
   console.log('terminate task')
+  const request = new Task();
+  request.id = currentTask.value.taskId;
+  axios.stopTask(request).then(res=>{
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: res.result,
+      type: 'success',
+    });
+    currentTask.value.task.status = TaskStatus.STOP;
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: Notifications.FAIL,
+      type: 'error',
+    });
+    console.error(e);
+  }).finally(()=>{
+
+  });
 }
 
 function startTask() {
   console.log('start task')
+  const request = new Task();
+  request.id = currentTask.value.taskId;
+  axios.startTask(request).then(res=>{
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: res.result,
+      type: 'success',
+    });
+    currentTask.value.task.status = TaskStatus.RUNNING;
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: Notifications.FAIL,
+      type: 'error',
+    });
+    console.error(e);
+  }).finally(()=>{
+
+  });
 }
 
 function selectSample(sampleId : string){

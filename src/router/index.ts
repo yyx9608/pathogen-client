@@ -4,6 +4,9 @@ import Login from '../views/Login.vue';
 import entry from '../views/Entry.vue';
 import Search from '../views/Search.vue';
 import UserConfig from '../views/UserConfig.vue';
+import PathogenPanel from '../views/PathogenPanel.vue';
+import TaskPanel from '../views/TaskPanel.vue';
+import SamplePanel from '../views/SamplePanel.vue';
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
@@ -23,6 +26,9 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'login', name: 'login', component: Login },
       { path: 'search', name: 'search', component: Search },
       { path: 'config', name: 'config', component: UserConfig },
+      { path: 'pathogen', name: 'pathogen', component: PathogenPanel },
+      { path: 'task', name: 'task', component: TaskPanel },
+      { path: 'sample', name: 'sample', component: SamplePanel },
     ],
   },
 ];

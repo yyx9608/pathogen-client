@@ -15,6 +15,7 @@ import {QueryResultRequest} from "../entity/request/QueryResultRequest";
 import {AnalysisResult} from "../entity/response/AnalysisResult";
 import {Pathogen} from "../entity/response/Pathogen";
 import {SearchRequest} from "../entity/request/SearchRequest";
+import {CreateTaskRequest} from "../entity/request/CreateTaskRequest";
 
 
 /**
@@ -51,20 +52,21 @@ export function exportFile(params : ExportRequest){
   });
 }
 
-export function createTask(params: object) {
-  return axios.post('/prj/task/insert', params)
+export function createTask(params: CreateTaskRequest) {
+  return axios.post<Response<string>,Response<string>, CreateTaskRequest>(RequestUrl.CREATE_TASK, params)
 }
 
-function startTask(params: object) {
-  return axios.post('/prj/task/start', params)
+function startTask(params: Task) {
+  return axios.post<Response<any>, Response<any>, Task>(RequestUrl.START_TASK, params)
 }
-function stopTask(params: object) {
-  return axios.post('/prj/task/terminate', params)
+function stopTask(params: Task) {
+  return axios.post<Response<any>, Response<any>, Task>(RequestUrl.STOP_TASK, params)
 }
 
 function sampleResult(params: QueryResultRequest) {
   return axios.post<Response<AnalysisResult>[],Response<AnalysisResult[]>, QueryResultRequest>(RequestUrl.QUERY_RESULTS, params)
 }
+
 function sampleInfo(params: object) {
   return axios.post('/prj/sample/queryList', params)
 }
@@ -89,8 +91,9 @@ function addResult(params : AnalysisResult) {
 }
 
 // 上传样本信息
-function submitUpload(params: object){
-  return axios.post( 'http://1486641sd0.iask.in:35485/upload/', params)
+function submitUpload(params: FormData){
+  return axios.post<Response<string>, Response<string>, FormData>(RequestUrl.UPLOAD, params, {
+  })
 }
 // 搜索结果
 function resultSearch(params: object){

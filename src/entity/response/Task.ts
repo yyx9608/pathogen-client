@@ -18,6 +18,8 @@ export class Task extends BaseEntity {
 	status ?: TaskStatus;
 	/**任务步骤*/
 	step ?: Step;
+
+
 	
 
 }
