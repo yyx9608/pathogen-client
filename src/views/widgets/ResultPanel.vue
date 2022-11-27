@@ -63,18 +63,18 @@
 
 <script lang="ts" setup>
 
-import {AnalysisResult} from "../entity/response/AnalysisResult";
-import {ResultStatus} from "../entity/enums/ResultStatus";
+import {AnalysisResult} from "../../entity/response/AnalysisResult";
+import {ResultStatus} from "../../entity/enums/ResultStatus";
 import {Ref, watch} from "vue";
 import {ref} from "@vue/reactivity";
-import {Action} from "../entity/enums/local/Action";
-import {Sign} from "../entity/enums/Sign";
-import {Pathogen} from "../entity/response/Pathogen";
-import axios from "../dao/interface";
-import {SearchRequest} from "../entity/request/SearchRequest";
+import {Action} from "../../entity/enums/local/Action";
+import {Sign} from "../../entity/enums/Sign";
+import {Pathogen} from "../../entity/response/Pathogen";
+import axios from "../../dao/interface";
+import {SearchRequest} from "../../entity/request/SearchRequest";
 import PathogenPanel from "./PathogenPanel.vue";
 import {ElNotification} from "element-plus";
-import {Notifications} from "../constants/Constants";
+import {Notifications} from "../../constants/Constants";
 
 const props = defineProps<{ analysisResult : AnalysisResult, action : Action}>();
 const emits = defineEmits(['update','insert','exit']);

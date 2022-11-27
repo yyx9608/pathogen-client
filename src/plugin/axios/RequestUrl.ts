@@ -19,5 +19,7 @@ export class RequestUrl {
     static readonly CREATE_TASK : string = '/prj/task/insert';
     static readonly START_TASK : string = '/prj/task/start';
     static readonly STOP_TASK : string = '/prj/task/terminate';
+    static readonly QUERY_USER_CONFIG : string = '/prj/config/query';
+    static readonly UPDATE_USER_CONFIG : string = '/prj/config/update';
 
 }

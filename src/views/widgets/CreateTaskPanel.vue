@@ -49,20 +49,20 @@
 
 <script lang="ts" setup>
 
-import {Action} from "../entity/enums/local/Action";
-import {Task} from "../entity/response/Task";
+import {Action} from "../../entity/enums/local/Action";
+import {Task} from "../../entity/response/Task";
 import {ref} from "@vue/reactivity";
 import {Ref, watch} from "vue";
-import {SequenceData} from "../entity/response/SequenceData";
-import {Source} from "../entity/enums/Source";
-import {RequestUrl} from "../plugin/axios/RequestUrl";
+import {SequenceData} from "../../entity/response/SequenceData";
+import {Source} from "../../entity/enums/Source";
+import {RequestUrl} from "../../plugin/axios/RequestUrl";
 import {ElNotification, UploadFile, UploadFiles, UploadRequestOptions} from "element-plus";
-import {Response} from "../entity/response/Response";
-import {SequenceType} from "../entity/enums/SequenceType";
-import {CreateTaskRequest} from "../entity/request/CreateTaskRequest";
-import axios from '../dao/interface';
-import {Notifications} from "../constants/Constants";
-import {Loading} from "../utils/Loading";
+import {Response} from "../../entity/response/Response";
+import {SequenceType} from "../../entity/enums/SequenceType";
+import {CreateTaskRequest} from "../../entity/request/CreateTaskRequest";
+import axios from '../../dao/interface';
+import {Notifications} from "../../constants/Constants";
+import {Loading} from "../../utils/Loading";
 
 const props = defineProps<{ createTaskRequest : CreateTaskRequest, action : Action}>();
 const emits = defineEmits(['onTaskCreate']);

@@ -39,9 +39,9 @@
 <script lang="ts" setup>
 
 import {Ref, ref, watch} from "vue";
-import {Pathogen} from "../entity/response/Pathogen";
-import axios from "../dao/interface";
-import store from "../store";
+import {Pathogen} from "../../entity/response/Pathogen";
+import axios from "../../dao/interface";
+import store from "../../store";
 
 const props = defineProps<{ pathogenId : string }>();
 const pathogenEntity = ref<Pathogen>(new Pathogen()) as Ref<Pathogen>;

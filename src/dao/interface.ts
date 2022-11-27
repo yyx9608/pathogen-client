@@ -1,3 +1,4 @@
+import {UserConfig} from "../entity/response/UserConfig";
 import axios from '../plugin/axios';
 import {User} from "../entity/response/User";
 import {Response} from "../entity/response/Response";
@@ -90,6 +91,14 @@ function addResult(params : AnalysisResult) {
   return axios.post<Response<string>, Response<string>, AnalysisResult>(RequestUrl.INSERT_ANALYSIS_RESULT, params);
 }
 
+function fetchConfig() {
+  return axios.post<Response<UserConfig>,Response<UserConfig>, any>(RequestUrl.QUERY_USER_CONFIG);
+}
+
+function updateConfig(config: UserConfig) {
+  return axios.post<Response<any>, Response<any>, UserConfig>(RequestUrl.UPDATE_USER_CONFIG, config);
+}
+
 // 上传样本信息
 function submitUpload(params: FormData){
   return axios.post<Response<string>, Response<string>, FormData>(RequestUrl.UPLOAD, params, {
@@ -116,5 +125,5 @@ function pathogenSearch(params : SearchRequest) {
 export default { queryLabs, login, querySeq, taskList, task,
   querySample, exportFile, createTask, startTask ,stopTask,
   sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
-  sampleVerify, resultVerify, submitUpload, resultSearch,
+  sampleVerify, resultVerify, submitUpload, resultSearch, fetchConfig, updateConfig,
   sampleSearch, taskSearch, pathogenQuery, pathogenSearch, addResult}

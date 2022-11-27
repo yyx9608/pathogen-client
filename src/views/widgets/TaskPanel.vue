@@ -111,20 +111,20 @@
 
 <script lang="ts" setup>
 
-import {TaskStatus} from "../entity/enums/TaskStatus";
+import {TaskStatus} from "../../entity/enums/TaskStatus";
 import {Ref, ref, watch} from "vue";
-import {DataInTask} from "../entity/local/DataInTask";
-import axios from "../dao/interface";
-import {Task} from "../entity/response/Task";
-import {SequenceData} from "../entity/response/SequenceData";
-import {QuerySampleInfoRequest} from "../entity/request/QuerySampleInfoRequest";
+import {DataInTask} from "../../entity/local/DataInTask";
+import axios from "../../dao/interface";
+import {Task} from "../../entity/response/Task";
+import {SequenceData} from "../../entity/response/SequenceData";
+import {QuerySampleInfoRequest} from "../../entity/request/QuerySampleInfoRequest";
 import {ElMessage, ElNotification} from "element-plus";
 import SamplePanel from "./SamplePanel.vue";
-import {ExportRequest} from "../entity/request/ExportRequest";
-import {DownloadEntry} from "../entity/enums/DownloadEntry";
-import {SampleInfo} from "../entity/response/SampleInfo";
-import {DownloadHelper} from "../utils/DownloadHelper";
-import {Notifications} from "../constants/Constants";
+import {ExportRequest} from "../../entity/request/ExportRequest";
+import {DownloadEntry} from "../../entity/enums/DownloadEntry";
+import {SampleInfo} from "../../entity/response/SampleInfo";
+import {DownloadHelper} from "../../utils/DownloadHelper";
+import {Notifications} from "../../constants/Constants";
 
 const props = defineProps<{ taskId : string }>();
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;

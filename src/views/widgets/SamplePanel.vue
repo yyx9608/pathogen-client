@@ -162,24 +162,24 @@
 <script lang="ts" setup>
 
 import {Ref, ref, watch} from "vue";
-import {DataInSample} from "../entity/local/DataInSample";
-import axios from "../dao/interface";
-import {SampleInfo} from "../entity/response/SampleInfo";
-import {QueryResultRequest} from "../entity/request/QueryResultRequest";
-import {AnalysisResult} from "../entity/response/AnalysisResult";
-import {ExportRequest} from "../entity/request/ExportRequest";
-import {DownloadEntry} from "../entity/enums/DownloadEntry";
-import {DownloadHelper} from "../utils/DownloadHelper";
+import {DataInSample} from "../../entity/local/DataInSample";
+import axios from "../../dao/interface";
+import {SampleInfo} from "../../entity/response/SampleInfo";
+import {QueryResultRequest} from "../../entity/request/QueryResultRequest";
+import {AnalysisResult} from "../../entity/response/AnalysisResult";
+import {ExportRequest} from "../../entity/request/ExportRequest";
+import {DownloadEntry} from "../../entity/enums/DownloadEntry";
+import {DownloadHelper} from "../../utils/DownloadHelper";
 import {ElNotification} from "element-plus";
 import PathogenPanel from "./PathogenPanel.vue";
-import {SampleStatus} from "../entity/enums/SampleStatus";
-import {Loading} from "../utils/Loading";
-import {Notifications} from "../constants/Constants";
-import {ResultStatus} from "../entity/enums/ResultStatus";
-import Result from "./Result.vue";
-import {Action} from "../entity/enums/local/Action";
-import {Pathogen} from "../entity/response/Pathogen";
-import store from "../store";
+import {SampleStatus} from "../../entity/enums/SampleStatus";
+import {Loading} from "../../utils/Loading";
+import {Notifications} from "../../constants/Constants";
+import {ResultStatus} from "../../entity/enums/ResultStatus";
+import Result from "./ResultPanel.vue";
+import {Action} from "../../entity/enums/local/Action";
+import {Pathogen} from "../../entity/response/Pathogen";
+import store from "../../store";
 
 const props = defineProps<{ sampleId : string }>();
 const dataInSample = ref<DataInSample>(new DataInSample()) as Ref<DataInSample>;

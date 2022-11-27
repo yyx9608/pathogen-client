@@ -16,17 +16,14 @@ import router from "../../router";
 
 
 function toHome() {
-  console.log('to homepage');
   router.push({ name: 'main', replace : false });
 }
 
 function toConfig() {
-  console.log('to config');
   router.push({ name: 'config', replace : false });
 }
 
 function toSearch() {
-  console.log('to search');
   router.push({ name: 'search', replace : false });
 }
 

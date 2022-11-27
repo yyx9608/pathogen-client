@@ -5,22 +5,32 @@
     </el-header>
 
     <el-main>
-      <el-input
-          v-model="keyWord" placeholder="输入关键字">
-        <template #append>
-          <el-button :onclick="searchInfo" :icon="Search" />
-        </template>
-      </el-input>
-
-      <el-radio-group v-model="target">
-        <el-radio :label="SearchTarget.PATHOGEN" size="large">{{ SearchTarget.PATHOGEN }}</el-radio>
-        <el-radio :label="SearchTarget.TASK" size="large">{{ SearchTarget.TASK }}</el-radio>
-        <el-radio :label="SearchTarget.SAMPLE" size="large">{{ SearchTarget.SAMPLE }}</el-radio>
-        <el-radio :label="SearchTarget.RESULT" size="large">{{ SearchTarget.RESULT }}</el-radio>
-      </el-radio-group>
+      <el-container style="text-align: -webkit-center;" direction="vertical">
+        <el-row>
+          <el-col :span="24">
+            <el-input style="width: 50%;" v-model="keyWord" placeholder="输入关键字">
+              <template #append>
+                <el-button :onclick="searchInfo" :icon="Search" />
+              </template>
+            </el-input>
+          </el-col>
+          <el-col :span="24">
+            <el-radio-group style="width: 50%;" v-model="target">
+              <el-radio :label="SearchTarget.PATHOGEN" size="large">{{ SearchTarget.PATHOGEN }}</el-radio>
+              <el-radio :label="SearchTarget.TASK" size="large">{{ SearchTarget.TASK }}</el-radio>
+              <el-radio :label="SearchTarget.SAMPLE" size="large">{{ SearchTarget.SAMPLE }}</el-radio>
+              <el-radio :label="SearchTarget.RESULT" size="large">{{ SearchTarget.RESULT }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+        <div style="text-align: -webkit-center;">
+          <div style="width: 50%;">
+            <el-skeleton v-if="searching" :rows="10" animated />
+          </div>
+        </div>
+      </el-container>
     </el-main>
-
-  </div>>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -39,15 +49,45 @@ enum SearchTarget {
 
 const target = ref<SearchTarget>(SearchTarget.PATHOGEN) as Ref<SearchTarget>;
 const keyWord = ref<string>('') as Ref<string>;
+const searching = ref<boolean>(false) as Ref<boolean>;
 
 function searchInfo(){
-  console.log('target => ' + target.value);
-  console.log('key word => ' + keyWord.value);
+  if (target.value === SearchTarget.PATHOGEN){
+    searchPathogen();
+  } else if (target.value === SearchTarget.TASK){
+    searchTask();
+  } else if (target.value === SearchTarget.SAMPLE){
+    searchSample();
+  } else if (target.value === SearchTarget.RESULT){
+    searchResult();
+  }
 }
 
+function searchPathogen() {
+  searching.value = true;
+  setTimeout(function (){
+    searching.value = false;
+  },3000);
+}
+
+function searchTask() {
+
+}
+
+function searchSample() {
+
+}
+
+function searchResult() {
+
+}
 
 </script>
 
 <style scoped>
+
+.search {
+
+}
 
 </style>

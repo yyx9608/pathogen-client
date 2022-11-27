@@ -52,13 +52,13 @@ import {Task} from "../entity/response/Task";
 import {TasksPagerRequest} from "../entity/request/TasksPagerRequest";
 import {Group} from "../entity/response/Group";
 import {SampleInfo} from "../entity/response/SampleInfo";
-import TaskPanel from "./TaskPanel.vue";
+import TaskPanel from "./widgets/TaskPanel.vue";
 import {DataInLab} from "../entity/local/DataInLab";
 import {DataInTask} from "../entity/local/DataInTask";
 import Header from "./widgets/Header.vue";
 import {Notifications} from '../constants/Constants';
-import NewTask from "./TaskViewer.vue";
-import TaskViewer from "./TaskViewer.vue";
+import NewTask from "./widgets/CreateTaskPanel.vue";
+import TaskViewer from "./widgets/CreateTaskPanel.vue";
 import {Action} from "../entity/enums/local/Action";
 import {CreateTaskRequest} from '../entity/request/CreateTaskRequest';
 

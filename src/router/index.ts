@@ -4,9 +4,9 @@ import Login from '../views/Login.vue';
 import entry from '../views/Entry.vue';
 import Search from '../views/Search.vue';
 import UserConfig from '../views/UserConfig.vue';
-import PathogenPanel from '../views/PathogenPanel.vue';
-import TaskPanel from '../views/TaskPanel.vue';
-import SamplePanel from '../views/SamplePanel.vue';
+import PathogenPanel from '../views/widgets/PathogenPanel.vue';
+import TaskPanel from '../views/widgets/TaskPanel.vue';
+import SamplePanel from '../views/widgets/SamplePanel.vue';
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 

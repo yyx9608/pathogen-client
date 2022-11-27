@@ -8,6 +8,8 @@ export class Notifications {
     static SELECT_LAB : string = '选择实验室';
     static CANCEL : string = '取消';
     static CONFIRM : string = '确定';
+    static EDIT : string = '编辑';
+    static SAVE : string = '保存';
 
 
 }
