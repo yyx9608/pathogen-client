@@ -41,10 +41,10 @@ export class RxWebSocket {
 			},
 		});
 		RxWebSocket.subscription = RxWebSocket.subject.subscribe({
-			next(msg : any){
+			next(msg : BaseMessage<any>){
 				if (msg.code === MessageCode.HEART_BEAT){
 					//收到心跳包、30s后发送下一个
-					console.log('receive heartbeat message at ' + new Date());
+					RxWebSocket.timerSubject.next(1);
 					timer(30000).subscribe({
 						next(value){
 							RxWebSocket.sendHeartbeat();
@@ -57,7 +57,6 @@ export class RxWebSocket {
 	}
 	
 	private static sendHeartbeat(){
-		console.log('发送心跳包 at ' +  new Date());
 		const msg = new BaseMessage();
 		msg.code = MessageCode.HEART_BEAT;
 		RxWebSocket.subject.next(msg);
