@@ -51,6 +51,9 @@ const keyWord = ref<string>('') as Ref<string>;
 const searching = ref<boolean>(false) as Ref<boolean>;
 
 function searchInfo(){
+  if (keyWord.value.length < 1 || keyWord.value.length > 84){
+    return;
+  }
   if (target.value === SearchTarget.PATHOGEN){
     searchPathogen();
   } else if (target.value === SearchTarget.TASK){

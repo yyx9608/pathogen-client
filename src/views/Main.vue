@@ -27,7 +27,7 @@
         <el-empty v-if="currentTask.taskId === ''" description="empty view" />
       </el-main>
     </el-container>
-    <el-dialog v-model="showAddTask">
+    <el-dialog v-model="showAddTask" destroy-on-close>
       <TaskViewer ref="taskViewer" :action="Action.INSERT" @onTaskCreate="onTaskCreated" :create-task-request="request"/>
       <template #footer>
       <span class="dialog-footer">
@@ -52,6 +52,7 @@ import {Task} from "../entity/response/Task";
 import {TasksPagerRequest} from "../entity/request/TasksPagerRequest";
 import {Group} from "../entity/response/Group";
 import {SampleInfo} from "../entity/response/SampleInfo";
+import {RxWebSocket} from "../plugin/message/RxWebSocket";
 import TaskPanel from "./widgets/TaskPanel.vue";
 import {DataInLab} from "../entity/local/DataInLab";
 import {DataInTask} from "../entity/local/DataInTask";
@@ -84,6 +85,8 @@ const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
 const showAddTask = ref<boolean>(false) as Ref<boolean>;
 const taskViewer = ref();
 
+
+RxWebSocket.init();
 
 onMounted(() => {
   queryLabs()

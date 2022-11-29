@@ -159,6 +159,8 @@ watch(
         nt.taskId = newValue;
         currentTask.value = nt;
         sequenceData.value = new SequenceData();
+        currentTask.value.samples = [];
+        selectedSample.value = '';
         queryTask();
       }
     }, {

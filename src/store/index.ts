@@ -23,7 +23,7 @@ const store = createStore<GlobalData>({
       return state.user === undefined;
     },
 
-    currentUser(state){
+    currentUser(state) : User|undefined {
       return state.user;
     },
     
