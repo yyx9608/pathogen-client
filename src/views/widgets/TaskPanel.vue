@@ -153,7 +153,7 @@ const selectedSample = ref<string>('') as Ref<string>;
 
 const subscription = RxWebSocket.register({
   next(msg :BaseMessage<any>){
-    console.log('type of ' + msg.code + ' is ' + typeof msg.code + ' payload ' + msg.payload);
+    console.log('receive message [code] => ' + msg.code + ' payload =>' + msg.payload);
     if (msg.code === MessageCode.TASK_STEP_UPDATE){
       const updateMsg : Payload<UpdateTaskStepPayload> = JSON.parse(msg.payload);
       if (updateMsg.content!.taskId === currentTask.value.taskId){

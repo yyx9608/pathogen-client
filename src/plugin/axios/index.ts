@@ -37,6 +37,8 @@ axios.interceptors.response.use(res => {
             }
         });
         return Promise.reject(res.data.msg);
+    } else if (res.data.code === ResponseEnum.INVALID_PARAM){
+        return Promise.reject(res.data.msg);
     } else if (res.data[0].code === ResponseEnum.FAIL ||
         res.data[0].code === ResponseEnum.CONFIG_NOT_FOUND ||
         res.data[0].code === ResponseEnum.DELETE_FAIL ||
