@@ -111,20 +111,26 @@
 
 <script lang="ts" setup>
 
-import {TaskStatus} from "../../entity/enums/TaskStatus";
-import {Ref, ref, watch} from "vue";
-import {DataInTask} from "../../entity/local/DataInTask";
-import axios from "../../dao/interface";
-import {Task} from "../../entity/response/Task";
-import {SequenceData} from "../../entity/response/SequenceData";
-import {QuerySampleInfoRequest} from "../../entity/request/QuerySampleInfoRequest";
 import {ElMessage, ElNotification} from "element-plus";
-import SamplePanel from "./SamplePanel.vue";
-import {ExportRequest} from "../../entity/request/ExportRequest";
-import {DownloadEntry} from "../../entity/enums/DownloadEntry";
-import {SampleInfo} from "../../entity/response/SampleInfo";
-import {DownloadHelper} from "../../utils/DownloadHelper";
+import {Ref, ref, watch} from "vue";
 import {Notifications} from "../../constants/Constants";
+import axios from "../../dao/interface";
+import {DownloadEntry} from "../../entity/enums/DownloadEntry";
+import {TaskStatus} from "../../entity/enums/TaskStatus";
+import {DataInTask} from "../../entity/local/DataInTask";
+import {BaseMessage} from "../../entity/message/BaseMessage";
+import {MessageCode} from "../../entity/message/MessageCode";
+import {Payload} from "../../entity/message/Payload";
+import {SingleValuePayload} from "../../entity/message/SingleValuePayload";
+import {UpdateTaskStepPayload} from "../../entity/message/UpdateTaskStepPayload";
+import {ExportRequest} from "../../entity/request/ExportRequest";
+import {QuerySampleInfoRequest} from "../../entity/request/QuerySampleInfoRequest";
+import {SampleInfo} from "../../entity/response/SampleInfo";
+import {SequenceData} from "../../entity/response/SequenceData";
+import {Task} from "../../entity/response/Task";
+import {RxWebSocket} from "../../plugin/message/RxWebSocket";
+import {DownloadHelper} from "../../utils/DownloadHelper";
+import SamplePanel from "./SamplePanel.vue";
 
 const props = defineProps<{ taskId : string }>();
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
@@ -145,8 +151,33 @@ const downloading = ref<boolean>(false) as Ref<boolean>;
 
 const selectedSample = ref<string>('') as Ref<string>;
 
-
-
+const subscription = RxWebSocket.register({
+  next(msg :BaseMessage<any>){
+    console.log('type of ' + msg.code + ' is ' + typeof msg.code + ' payload ' + msg.payload);
+    if (msg.code === MessageCode.TASK_STEP_UPDATE){
+      const updateMsg : Payload<UpdateTaskStepPayload> = JSON.parse(msg.payload);
+      if (updateMsg.content!.taskId === currentTask.value.taskId){
+        currentTask.value.task.step = updateMsg.content!.step;
+      }
+    } else if (msg.code === MessageCode.TASK_COMPLETE){
+      const completeMsg : Payload<SingleValuePayload<string>> = JSON.parse(msg.payload);
+      if (completeMsg.content!.value === currentTask.value.taskId){
+        currentTask.value.task.status = TaskStatus.COMPLETE;
+      }
+    } else if (msg.code === MessageCode.TASK_ERROR){
+      const errorMsg : Payload<SingleValuePayload<string>> = JSON.parse(msg.payload);
+      if (errorMsg.content!.value === currentTask.value.taskId){
+        currentTask.value.task.status = TaskStatus.ERROR;
+      }
+    } else if (msg.code === MessageCode.TASK_DOWNLOAD_SEQUENCE){
+      //开始下载
+    } else if (msg.code === MessageCode.TASK_DOWNLOAD_SEQUENCE_UPDATE){
+      //下载进度更新
+    } else if (msg.code === MessageCode.TASK_DOWNLOAD_COMPLETE){
+      //下载完成
+    }
+  }
+});
 
 currentTask.value.taskId = props.taskId;
 queryTask();

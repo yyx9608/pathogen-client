@@ -37,21 +37,22 @@ axios.interceptors.response.use(res => {
             }
         });
         return Promise.reject(res.data.msg);
-    } else if (res.data.code === ResponseEnum.FAIL ||
-        res.data.code === ResponseEnum.CONFIG_NOT_FOUND ||
-        res.data.code === ResponseEnum.DELETE_FAIL ||
-        res.data.code === ResponseEnum.INVALID_PARAM ||
-        res.data.code === ResponseEnum.INSERT_FAIL ||
-        res.data.code === ResponseEnum.MKDIR_TMP_FAIL ||
-        res.data.code === ResponseEnum.FILE_NOT_FOUND ||
-        res.data.code === ResponseEnum.QUERY_FAIL ||
-        res.data.code === ResponseEnum.SAMPLE_STATUS_ERROR ||
-        res.data.code === ResponseEnum.TASK_NOT_FOUND ||
-        res.data.code === ResponseEnum.USER_NOT_FOUND ||
-        res.data.code === ResponseEnum.SAMPLE_NOT_FOUND ||
-        res.data.code === ResponseEnum.UPDATE_FAIL ||
-        res.data.code === ResponseEnum.UPLOAD_FAIL){
-        return Promise.reject(res.data.msg);
+    } else if (res.data[0].code === ResponseEnum.FAIL ||
+        res.data[0].code === ResponseEnum.CONFIG_NOT_FOUND ||
+        res.data[0].code === ResponseEnum.DELETE_FAIL ||
+        res.data[0].code === ResponseEnum.INVALID_PARAM ||
+        res.data[0].code === ResponseEnum.INSERT_FAIL ||
+        res.data[0].code === ResponseEnum.MKDIR_TMP_FAIL ||
+        res.data[0].code === ResponseEnum.FILE_NOT_FOUND ||
+        res.data[0].code === ResponseEnum.QUERY_FAIL ||
+        res.data[0].code === ResponseEnum.SAMPLE_STATUS_ERROR ||
+        res.data[0].code === ResponseEnum.TASK_NOT_FOUND ||
+        res.data[0].code === ResponseEnum.USER_NOT_FOUND ||
+        res.data[0].code=== ResponseEnum.SAMPLE_NOT_FOUND ||
+        res.data[0].code === ResponseEnum.UPDATE_FAIL ||
+        res.data[0].code=== ResponseEnum.UPLOAD_FAIL){
+        console.log('error ' + res.data.code);
+        return Promise.reject(res.data[0].msg);
     }
     if (res.headers['content-type']!.match('application/octet-stream')){
         return res;

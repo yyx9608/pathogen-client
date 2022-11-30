@@ -103,6 +103,7 @@ function submit(){
   loading.value = true;
   createTaskRequest.value.sequenceData.remotePath = source.value + remotePath.value;
   axios.createTask(createTaskRequest.value).then(res=>{
+    console.log(res);
     ElNotification({
       title: Notifications.SUCCESS,
       message: res.result,
@@ -113,7 +114,7 @@ function submit(){
   }).catch(e=>{
     ElNotification({
       title: Notifications.FAIL,
-      message: Notifications.FAIL,
+      message: e,
       type: 'error',
     });
     console.error(e);
