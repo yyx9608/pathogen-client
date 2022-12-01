@@ -90,12 +90,32 @@
 
       <el-container direction="vertical" v-if="sampleId !== undefined && sampleId !== ''">
         <el-skeleton v-if="fetchingResult" :rows="10" animated />
+        <div class="flex justify-content-end margin10">
+          <el-popover width="250" trigger="click">
+            <template #reference>
+              <el-icon><Operation /></el-icon>
+            </template>
+            <el-checkbox-group min="1" v-model="selectedColumns">
+              <el-checkbox label="信号强度" />
+              <el-checkbox label="报告区域" />
+              <el-checkbox label="初始报告区域" />
+              <el-checkbox label="病原" />
+              <el-checkbox label="样本类型" />
+              <el-checkbox label="报告标签" />
+              <el-checkbox label="reads" />
+              <el-checkbox label="copy nums" />
+              <el-checkbox label="mapping reads" />
+              <el-checkbox label="q30 reads" />
+              <el-checkbox label="该病原体同批检出数量" />
+            </el-checkbox-group>
+          </el-popover>
+        </div>
         <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="small">
-          <el-table-column align="center" prop="sign" label="信号强度"/>
-          <el-table-column align="center" prop="status" label="报告区域">
+          <el-table-column v-if="selectedColumns.includes('信号强度')" align="center" prop="sign" label="信号强度"/>
+          <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" prop="status" label="报告区域">
           </el-table-column>
-          <el-table-column align="center" prop="rawStatus" label="初始报告区域"/>
-          <el-table-column align="center" label="病原">
+          <el-table-column v-if="selectedColumns.includes('初始报告区域')" align="center" prop="rawStatus" label="初始报告区域"/>
+          <el-table-column v-if="selectedColumns.includes('病原')" align="center" label="病原">
             <template #default="scope">
               <el-popover trigger="click" width="80%">
                 <PathogenPanel :pathogen-id="selectedPathogen"></PathogenPanel>
@@ -106,13 +126,13 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="sampleType" label="样本类型" />
-          <el-table-column align="center" prop="reportTag" label="报告标签" />
-          <el-table-column align="center" prop="readsNums" label="reads" />
-          <el-table-column align="center" prop="copyNums" label="copy nums" />
-          <el-table-column align="center" prop="mappingReads" label="mapping reads" />
-          <el-table-column align="center" prop="q30Reads" label="q30 reads" />
-          <el-table-column align="center" prop="pathogensNums" label="该病原体同批检出数量" />
+          <el-table-column v-if="selectedColumns.includes('样本类型')" align="center" prop="sampleType" label="样本类型" />
+          <el-table-column v-if="selectedColumns.includes('报告标签')" align="center" prop="reportTag" label="报告标签" />
+          <el-table-column v-if="selectedColumns.includes('reads')" align="center" prop="readsNums" label="reads" />
+          <el-table-column v-if="selectedColumns.includes('copy nums')" align="center" prop="copyNums" label="copy nums" />
+          <el-table-column v-if="selectedColumns.includes('mapping reads')" align="center" prop="mappingReads" label="mapping reads" />
+          <el-table-column v-if="selectedColumns.includes('q30 reads')" align="center" prop="q30Reads" label="q30 reads" />
+          <el-table-column v-if="selectedColumns.includes('该病原体同批检出数量')" align="center" prop="pathogensNums" label="该病原体同批检出数量" />
           <el-table-column align="center" fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-container style="justify-content: center">
@@ -194,6 +214,10 @@ const verifyForm = ref<SampleInfo>(new SampleInfo()) as Ref<SampleInfo>;
 const showEditDialog = ref<boolean>(false) as Ref<boolean>;
 const selectedResult = ref<AnalysisResult>(new AnalysisResult()) as Ref<AnalysisResult>;
 const resultAction = ref<Action>(Action.VIEW) as Ref<Action>;
+
+const selectedColumns = ref<string[]>([
+    '信号强度','报告区域','初始报告区域','病原','样本类型','报告标签','reads','copy nums','mapping reads','q30 reads','该病原体同批检出数量'
+]) as Ref<string[]>;
 
 class Command {
   static readonly GENERATE_REPORT : string = 'generateReport';

@@ -125,3 +125,15 @@ button:focus-visible {
   display: flex;
   justify-content: center;
 }
+
+.align-items-end {
+  align-items: end;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-content-end {
+  justify-content: end;
+}
