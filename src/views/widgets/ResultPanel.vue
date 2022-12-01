@@ -16,7 +16,7 @@
         <el-form-item class="form-item" label="信号强度" label-width="150px" :prop='result.sign'>
           <el-select v-model="result.sign" disabled :placeholder="result.sign">
             <el-option :key="Sign.HIGH" :label="Sign.HIGH" :value="Sign.HIGH" :disabled="result.sign === Sign.HIGH"/>
-            <el-option :key="Sign.MID" :label="Sign.MI" :value="Sign.MIY" :disabled="result.sign === Sign.MI"/>
+            <el-option :key="Sign.MID" :label="Sign.MID" :value="Sign.MID" :disabled="result.sign === Sign.MID"/>
             <el-option :key="Sign.LOW" :label="Sign.LOW" :value="Sign.LOW" :disabled="result.sign === Sign.LOW"/>
           </el-select>
         </el-form-item>
