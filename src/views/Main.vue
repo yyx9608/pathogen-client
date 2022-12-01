@@ -23,7 +23,7 @@
         </el-scrollbar>
       </el-aside>
       <el-main>
-        <TaskPanel v-if="currentTask.taskId !== ''" :task-id="currentTask.taskId"></TaskPanel>
+        <TaskPanel v-if="currentTask.taskId !== ''" @delete="deleteTask" :task-id="currentTask.taskId"></TaskPanel>
         <el-empty v-if="currentTask.taskId === ''" description="empty view" />
       </el-main>
     </el-container>
@@ -103,6 +103,19 @@ function queryLabs() {
   }).catch(e=>{
     ElMessage.error("获取实验室列表失败")
   })
+}
+
+function deleteTask(taskId: string) {
+  let i = -1;
+  currentLab.value.taskPager.content.forEach((value,index)=>{
+    if (value.id === taskId){
+      i = index;
+    }
+  });
+  if (i !== -1){
+    currentLab.value.taskPager.content.splice(i,1);
+    currentTask.value.taskId = '';
+  }
 }
 
 function addTask() {

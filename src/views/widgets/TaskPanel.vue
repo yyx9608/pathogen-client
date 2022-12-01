@@ -20,8 +20,8 @@
                     <el-dropdown-item icon="Warning" :command='Command.TERMINATE_TASK' :disabled='currentTask.task.status !== TaskStatus.RUNNING'>
                       中止任务
                     </el-dropdown-item>
-                    <el-dropdown-item icon="Edit" :command='Command.EDIT_TASK' disabled>
-                      编辑任务
+                    <el-dropdown-item icon="Edit" :command='Command.REMOVE_TASK' :disabled="currentTask.task.status !== TaskStatus.ERROR">
+                      删除任务
                     </el-dropdown-item>
                     <el-dropdown-item icon="Document" divided :command='Command.SHOW_SAMPLES' :disabled='currentTask.task.status !== TaskStatus.COMPLETE'>
                       查看结果
@@ -145,6 +145,7 @@ import {DownloadHelper} from "../../utils/DownloadHelper";
 import SamplePanel from "./SamplePanel.vue";
 
 const props = defineProps<{ taskId : string }>();
+const emits = defineEmits(['delete']);
 const currentTask = ref<DataInTask>(new DataInTask()) as Ref<DataInTask>;
 const fetchingTask = ref<boolean>(false) as Ref<boolean>;
 const error = ref<boolean>(false) as Ref<boolean>;
@@ -153,7 +154,7 @@ const fetchingSequenceData = ref<boolean>(false) as Ref<boolean>;
 class Command {
   static readonly START_TASK : string = 'startTask';
   static readonly TERMINATE_TASK : string = 'terminateTask';
-  static readonly EDIT_TASK : string = 'editTask';
+  static readonly REMOVE_TASK : string = 'removeTask';
   static readonly SHOW_SAMPLES : string = 'showSamples';
   static readonly EXPORT_RESULT : string = 'exportResult';
 }
@@ -217,8 +218,8 @@ watch(
 const handleCommand = (command: string | number | object) => {
   if (command === Command.SHOW_SAMPLES){
     showSamples();
-  } else if (command === Command.EDIT_TASK){
-    editTask();
+  } else if (command === Command.REMOVE_TASK){
+    removeTask();
   } else if (command === Command.START_TASK){
     startTask();
   } else if (command === Command.TERMINATE_TASK){
@@ -249,8 +250,23 @@ function exportResult(){
   })
 }
 
-function editTask() {
-  console.log('edit task')
+function removeTask() {
+  axios.removeTask(currentTask.value.task).then(res=>{
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: res.msg,
+      type: 'success',
+    });
+    emits('delete', currentTask.value.taskId);
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: Notifications.FAIL,
+      type: 'error',
+    });
+  }).finally(()=>{
+
+  });
 }
 
 function terminateTask() {

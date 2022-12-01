@@ -65,6 +65,10 @@ function stopTask(params: Task) {
   return axios.post<Response<any>, Response<any>, Task>(RequestUrl.STOP_TASK, params)
 }
 
+function removeTask(param : Task) {
+  return axios.post<Response<boolean>, Response<boolean>, Task>(RequestUrl.REMOVE_ERROR_TASK, param);
+}
+
 function sampleResult(params: QueryResultRequest) {
   return axios.post<Response<AnalysisResult>[],Response<AnalysisResult[]>, QueryResultRequest>(RequestUrl.QUERY_RESULTS, params)
 }
@@ -131,7 +135,7 @@ function insertAgent(params : Agent){
   return axios.post<Response<string>, Response<string>, Agent>(RequestUrl.INSERT_AGENT, params);
 }
 
-export default { queryLabs, login, querySeq, taskList, task,
+export default { queryLabs, login, querySeq, taskList, task,removeTask,
   querySample, exportFile, createTask, startTask ,stopTask,fetchAgents,insertAgent,
   sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
   sampleVerify, resultVerify, submitUpload, resultSearch, fetchConfig, updateConfig,
