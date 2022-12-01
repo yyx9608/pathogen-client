@@ -11,6 +11,12 @@ axios.defaults.baseURL = str;
 axios.defaults.withCredentials = true;
 //响应拦截
 axios.interceptors.response.use(res => {
+    if (res.headers !== undefined){
+        const ct = res.headers['content-type'];
+        if (ct !== undefined && ct.match('application/octet-stream')){
+            return res;
+        }
+    }
     if (res.data.code === ResponseEnum.LOGIN_FAIL){
         ElMessage.error(res.data.msg);
         return Promise.reject(res.data.msg);
@@ -55,9 +61,6 @@ axios.interceptors.response.use(res => {
         res.data[0].code=== ResponseEnum.UPLOAD_FAIL){
         console.log('error ' + res.data.code);
         return Promise.reject(res.data[0].msg);
-    }
-    if (res.headers['content-type']!.match('application/octet-stream')){
-        return res;
     }
     return res.data[0];
 }, error => {

@@ -3,8 +3,9 @@
   <el-row class="head">
     <div><el-icon :onclick="toHome"><House /></el-icon></div>
     <el-row>
+      <div><el-icon :onclick="toAgents"><User /></el-icon></div>
       <div><el-icon :onclick="toSearch"><Search /></el-icon></div>
-      <div><el-icon :onclick="toConfig"><User /></el-icon></div>
+      <div><el-icon :onclick="toConfig"><Avatar /></el-icon></div>
     </el-row>
   </el-row>
 
@@ -25,6 +26,10 @@ function toConfig() {
 
 function toSearch() {
   router.push({ name: 'search', replace : false });
+}
+
+function toAgents() {
+  router.push({ name: 'agents', replace : false });
 }
 
 </script>

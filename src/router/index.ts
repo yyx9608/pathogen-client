@@ -7,6 +7,7 @@ import UserConfig from '../views/UserConfig.vue';
 import PathogenPanel from '../views/widgets/PathogenPanel.vue';
 import TaskPanel from '../views/widgets/TaskPanel.vue';
 import SamplePanel from '../views/widgets/SamplePanel.vue';
+import Agents from '../views/Agents.vue';
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
@@ -29,6 +30,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'pathogen', name: 'pathogen', component: PathogenPanel },
       { path: 'task', name: 'task', component: TaskPanel },
       { path: 'sample', name: 'sample', component: SamplePanel },
+      { path: 'agents', name: 'agents', component: Agents },
     ],
   },
 ];

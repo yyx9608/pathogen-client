@@ -19,7 +19,7 @@
                       审核
                     </el-dropdown-item>
                     <el-dropdown-item :command='Command.GENERATE_REPORT'
-                                      :disabled="dataInSample.sampleInfo.status !== SampleStatus.APPROVED || dataInSample.sampleInfo.reportFile !== undefined" icon="DocumentAdd">
+                                      :disabled="dataInSample.sampleInfo.status !== SampleStatus.APPROVED" icon="DocumentAdd">
                       生成报告
                     </el-dropdown-item>
                     <el-dropdown-item :command='Command.POST_REPORT' disabled icon="Message">
@@ -34,7 +34,7 @@
             </div>
           </template>
           <el-scrollbar max-height="500px">
-            <el-descriptions direction="vertical" :column="10" :title="dataInSample.sampleInfo.name" border size="small">
+            <el-descriptions direction="vertical" :column="14" :title="dataInSample.sampleInfo.name" border size="default">
               <el-descriptions-item label="样本编号" span="2">{{ dataInSample.sampleInfo.sampleId }}</el-descriptions-item>
               <el-descriptions-item label="报告" span="8">
                 {{ dataInSample.sampleInfo.reportFile }}
@@ -50,10 +50,10 @@
               <el-descriptions-item label="送检单位" span="2">{{ dataInSample.sampleInfo.hospital }} </el-descriptions-item>
               <el-descriptions-item label="送检医生" span="2">{{ dataInSample.sampleInfo.doctor }} </el-descriptions-item>
               <el-descriptions-item label="送检科室" span="2">{{ dataInSample.sampleInfo.office }} </el-descriptions-item>
+              <el-descriptions-item label="医院检测结果" span="14">{{ dataInSample.sampleInfo.resultFromHospital }} </el-descriptions-item>
               <el-descriptions-item label="床号" span="2">{{ dataInSample.sampleInfo.sickbedNum }} </el-descriptions-item>
               <el-descriptions-item label="病历号" span="2">{{ dataInSample.sampleInfo.medicalRecordNum }} </el-descriptions-item>
               <el-descriptions-item label="是否付费" span="2">{{ dataInSample.sampleInfo.paymentStatus }} </el-descriptions-item>
-              <el-descriptions-item label="医院检测结果" span="2">{{ dataInSample.sampleInfo.resultFromHospital }} </el-descriptions-item>
               <el-descriptions-item label="样本类型" span="2">{{ dataInSample.sampleInfo.sampleType }} </el-descriptions-item>
               <el-descriptions-item label="检测项目" span="2">{{ dataInSample.sampleInfo.analysisItem }} </el-descriptions-item>
               <el-descriptions-item label="核酸浓度" span="2">{{ dataInSample.sampleInfo.nucleicAcidConcentration }} </el-descriptions-item>
@@ -110,9 +110,17 @@
             </el-checkbox-group>
           </el-popover>
         </div>
-        <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="small">
+        <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="default">
           <el-table-column v-if="selectedColumns.includes('信号强度')" align="center" prop="sign" label="信号强度"/>
-          <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" prop="status" label="报告区域">
+          <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" label="报告区域">
+            <template #default="scope">
+              <el-select v-model="dataInSample.results[scope.$index].status" @change="onStatusChanged(dataInSample.results[scope.$index])" :placeholder="dataInSample.results[scope.$index].status">
+                <el-option :key="ResultStatus.MAIN" :label="ResultStatus.MAIN" :value="ResultStatus.MAIN" :disabled="dataInSample.results[scope.$index].status === ResultStatus.MAIN"/>
+                <el-option :key="ResultStatus.GRAY" :label="ResultStatus.GRAY" :value="ResultStatus.GRAY" :disabled="dataInSample.results[scope.$index].status === ResultStatus.GRAY"/>
+                <el-option :key="ResultStatus.BACKGROUND" :label="ResultStatus.BACKGROUND" :value="ResultStatus.BACKGROUND" :disabled="dataInSample.results[scope.$index].status === ResultStatus.BACKGROUND"/>
+                <el-option :key="ResultStatus.HIDE" :label="ResultStatus.HIDE" :value="ResultStatus.HIDE" :disabled="dataInSample.results[scope.$index].status === ResultStatus.HIDE"/>
+              </el-select>
+            </template>
           </el-table-column>
           <el-table-column v-if="selectedColumns.includes('初始报告区域')" align="center" prop="rawStatus" label="初始报告区域"/>
           <el-table-column v-if="selectedColumns.includes('病原')" align="center" label="病原">
@@ -137,13 +145,8 @@
             <template #default="scope">
               <el-container style="justify-content: center">
                 <el-button-group>
-                  <el-button :disabled="dataInSample.sampleInfo && (dataInSample.sampleInfo.status === SampleStatus.APPROVED ||
-                  dataInSample.sampleInfo.status === SampleStatus.REPORTED ||
-                  dataInSample.sampleInfo.status === SampleStatus.RE_SEQ)"
-                             type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
-                  <el-button :disabled="dataInSample.sampleInfo && (dataInSample.sampleInfo.status === SampleStatus.APPROVED ||
-                  dataInSample.sampleInfo.status === SampleStatus.REPORTED ||
-                  dataInSample.sampleInfo.status === SampleStatus.RE_SEQ)" type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
+                  <el-button type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
+                  <el-button type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
                 </el-button-group>
               </el-container>
             </template>
@@ -236,6 +239,25 @@ const handleCommand = (command: string | number | object) => {
   }
 }
 
+function onStatusChanged(val: AnalysisResult) {
+  Loading.showSimpleLoading();
+  axios.resultVerify(val).then(res=>{
+    ElNotification({
+      title: Notifications.SUCCESS,
+      message: res.msg,
+      type: 'success',
+    });
+  }).catch(e=>{
+    ElNotification({
+      title: Notifications.FAIL,
+      message: Notifications.FAIL,
+      type: 'error',
+    });
+  }).finally(()=>{
+    Loading.hideSimpleLoading();
+  });
+}
+
 function insertResult(r: AnalysisResult) {
   console.log('insertResult ' +r);
   dataInSample.value.results!.unshift(r);
@@ -243,9 +265,9 @@ function insertResult(r: AnalysisResult) {
 
 function updateResult(r : AnalysisResult) {
   console.log('updateResult ' +r);
-  dataInSample.value.results!.forEach(value => {
+  dataInSample.value.results!.forEach((value,index) => {
     if (value.id === r.id){
-      value.status = r.status;
+      dataInSample.value.results![index] = r;
     }
   })
 }

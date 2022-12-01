@@ -21,5 +21,7 @@ export class RequestUrl {
     static readonly STOP_TASK : string = '/prj/task/terminate';
     static readonly QUERY_USER_CONFIG : string = '/prj/config/query';
     static readonly UPDATE_USER_CONFIG : string = '/prj/config/update';
+    static readonly QUERY_AGENTS : string = '/prj/agents/queryList';
+    static readonly INSERT_AGENT : string = '/prj/agents/insert';
 
 }

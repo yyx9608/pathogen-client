@@ -17,6 +17,7 @@ import {AnalysisResult} from "../entity/response/AnalysisResult";
 import {Pathogen} from "../entity/response/Pathogen";
 import {SearchRequest} from "../entity/request/SearchRequest";
 import {CreateTaskRequest} from "../entity/request/CreateTaskRequest";
+import {Agent} from "../entity/response/Agent";
 
 
 /**
@@ -87,6 +88,10 @@ function resultVerify(params: AnalysisResult) {
   return axios.post<Response<any>, Response<any>, AnalysisResult>( RequestUrl.VERIFY_RESULT, params);
 }
 
+function fetchAgents(params : BasePagerRequest) {
+  return axios.post<Response<Agent[]>, Response<Agent[]>, BasePagerRequest>(RequestUrl.QUERY_AGENTS, params);
+}
+
 function addResult(params : AnalysisResult) {
   return axios.post<Response<string>, Response<string>, AnalysisResult>(RequestUrl.INSERT_ANALYSIS_RESULT, params);
 }
@@ -122,8 +127,12 @@ function pathogenSearch(params : SearchRequest) {
   return axios.post<Response<Pathogen[]>, Response<Pathogen[]>, SearchRequest>(RequestUrl.SEARCH_PATHOGEN, params);
 }
 
+function insertAgent(params : Agent){
+  return axios.post<Response<string>, Response<string>, Agent>(RequestUrl.INSERT_AGENT, params);
+}
+
 export default { queryLabs, login, querySeq, taskList, task,
-  querySample, exportFile, createTask, startTask ,stopTask,
+  querySample, exportFile, createTask, startTask ,stopTask,fetchAgents,insertAgent,
   sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
   sampleVerify, resultVerify, submitUpload, resultSearch, fetchConfig, updateConfig,
   sampleSearch, taskSearch, pathogenQuery, pathogenSearch, addResult}

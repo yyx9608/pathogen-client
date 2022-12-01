@@ -14,7 +14,7 @@
           <el-input v-model="result.rawStatus" disabled/>
         </el-form-item>
         <el-form-item class="form-item" label="信号强度" label-width="150px" :prop='result.sign'>
-          <el-select v-model="result.sign" disabled :placeholder="result.sign">
+          <el-select v-model="result.sign" :placeholder="result.sign">
             <el-option :key="Sign.HIGH" :label="Sign.HIGH" :value="Sign.HIGH" :disabled="result.sign === Sign.HIGH"/>
             <el-option :key="Sign.MID" :label="Sign.MID" :value="Sign.MID" :disabled="result.sign === Sign.MID"/>
             <el-option :key="Sign.LOW" :label="Sign.LOW" :value="Sign.LOW" :disabled="result.sign === Sign.LOW"/>
@@ -22,7 +22,6 @@
         </el-form-item>
         <el-form-item class="form-item" label="病原" label-width="150px">
           <el-autocomplete
-              :disabled="action !== Action.INSERT"
               v-model="selectedPathogen.name"
               :fetch-suggestions="searchPathogen"
               @select="handleSelect"/>
@@ -34,25 +33,25 @@
           </el-popover>
         </el-form-item>
         <el-form-item class="form-item" label="样本类型" label-width="150px" :prop='result.sampleType'>
-          <el-input v-model="result.sampleType" disabled/>
+          <el-input v-model="result.sampleType" />
         </el-form-item>
         <el-form-item class="form-item" label="报告标签" label-width="150px" :prop='result.reportTag'>
-          <el-input v-model="result.reportTag" disabled/>
+          <el-input v-model="result.reportTag" />
         </el-form-item>
         <el-form-item class="form-item" label="reads" label-width="150px" :prop='result.readsNums'>
-          <el-input v-model="result.readsNums" disabled/>
+          <el-input v-model="result.readsNums" />
         </el-form-item>
         <el-form-item class="form-item" label="copy nums" label-width="150px" :prop='result.copyNums'>
-          <el-input v-model="result.copyNums" disabled/>
+          <el-input v-model="result.copyNums" />
         </el-form-item>
         <el-form-item class="form-item" label="mapping reads" label-width="150px" :prop='result.mappingReads'>
-          <el-input v-model="result.mappingReads" disabled/>
+          <el-input v-model="result.mappingReads" />
         </el-form-item>
         <el-form-item class="form-item" label="q30 reads" label-width="150px" :prop='result.q30Reads'>
-          <el-input v-model="result.q30Reads" disabled/>
+          <el-input v-model="result.q30Reads" />
         </el-form-item>
         <el-form-item class="form-item" label="该病原同批检出数" label-width="150px" :prop='result.pathogensNums'>
-          <el-input v-model="result.pathogensNums" disabled/>
+          <el-input v-model="result.pathogensNums" />
         </el-form-item>
       </el-form>
     <el-button v-if="action === Action.EDIT || action === Action.INSERT" :loading="submitForm" :onclick="clickBtn">保存</el-button>
@@ -199,7 +198,7 @@ function verifyResult() {
   axios.resultVerify(result.value).then(res=>{
     ElNotification({
       title: Notifications.SUCCESS,
-      message: Notifications.SUCCESS,
+      message: res.msg,
       type: 'success',
     });
     notifyUpdate();
