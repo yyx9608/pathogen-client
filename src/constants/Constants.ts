@@ -10,6 +10,11 @@ export class Notifications {
     static CONFIRM : string = '确定';
     static EDIT : string = '编辑';
     static SAVE : string = '保存';
+    static INPUT_KEY_WORD : string = '请输入关键字';
+    static START_DATE_TIME : string = '起始时间';
+    static END_DATE_TIME : string = '起始时间';
 
+    
+    static DATE_TIME_FORMAT : string = 'yyyy-MM-dd HH:mm:ss';
 
 }

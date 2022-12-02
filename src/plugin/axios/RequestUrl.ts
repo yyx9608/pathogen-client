@@ -24,5 +24,6 @@ export class RequestUrl {
     static readonly QUERY_AGENTS : string = '/prj/agents/queryList';
     static readonly INSERT_AGENT : string = '/prj/agents/insert';
     static readonly REMOVE_ERROR_TASK : string = '/prj/task/delete';
+    static readonly SEARCH_TASK : string = '/prj/task/search';
 
 }
