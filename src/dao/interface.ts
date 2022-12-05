@@ -19,6 +19,7 @@ import {SearchRequest} from "../entity/request/SearchRequest";
 import {CreateTaskRequest} from "../entity/request/CreateTaskRequest";
 import {Agent} from "../entity/response/Agent";
 import {TaskSearchRequest} from "../entity/request/TaskSearchRequest";
+import {SampleSearchRequest} from "../entity/request/SampleSearchRequest";
 
 
 /**
@@ -210,8 +211,8 @@ function resultSearch(params: object){
 }
 
 
-function sampleSearch(params: object) {
-  return axios.post('/prj/sample/search', params)
+function sampleSearch(params: SampleSearchRequest) {
+  return axios.post<Response<SampleInfo[]>, Response<SampleInfo[]>, SampleSearchRequest>(RequestUrl.SEARCH_SAMPLE, params)
 }
 
 /**

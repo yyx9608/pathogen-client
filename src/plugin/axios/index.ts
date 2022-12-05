@@ -59,7 +59,7 @@ axios.interceptors.response.use(res => {
         res.data[0].code=== ResponseEnum.SAMPLE_NOT_FOUND ||
         res.data[0].code === ResponseEnum.UPDATE_FAIL ||
         res.data[0].code=== ResponseEnum.UPLOAD_FAIL){
-        console.log('error ' + res.data.code);
+        console.log('error ' + res.data[0].code);
         return Promise.reject(res.data[0].msg);
     }
     return res.data[0];

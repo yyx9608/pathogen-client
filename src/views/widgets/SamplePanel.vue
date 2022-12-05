@@ -222,6 +222,11 @@ const selectedColumns = ref<string[]>([
     '信号强度','报告区域','初始报告区域','病原','样本类型','报告标签','reads','copy nums','mapping reads','q30 reads','该病原体同批检出数量'
 ]) as Ref<string[]>;
 
+let nis = new DataInSample();
+nis.sampleId = props.sampleId;
+dataInSample.value = nis;
+querySampleInfo();
+
 class Command {
   static readonly GENERATE_REPORT : string = 'generateReport';
   static readonly POST_REPORT : string = 'postReport';
