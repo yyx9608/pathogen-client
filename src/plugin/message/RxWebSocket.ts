@@ -6,9 +6,10 @@ import {User} from "../../entity/response/User";
 import store from "../../store";
 
 
+
 export class RxWebSocket {
 	
-	static WEB_SOCKET_URL : string = process.env.NODE_ENV === 'development' ? 'ws://1486641sd0.iask.in:35485/ws/' : 'ws://1486641sd0.iask.in:35485/ws/';
+	static WEB_SOCKET_URL : string = 'ws://1486641sd0.iask.in:35485/ws/';
 	
 	private static subject : WebSocketSubject<BaseMessage<any>>;
 	private static timerSubject : Subject<any>;

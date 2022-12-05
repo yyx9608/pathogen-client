@@ -11,6 +11,7 @@ export default defineConfig(({command, mode})=>{
     },
     plugins: [vue()],
     server: {
+      port : 8081,
       open : true,
       proxy: {
         '/devServer': {
@@ -24,7 +25,7 @@ export default defineConfig(({command, mode})=>{
         'ws://': {//捕获API的标志，如果API中有这个字符串，那么就开始匹配代理，
           //target : 'ws://localhost:8080/',//代理的api地址，就是要跨域的地址
           //target : 'ws://1486641sd0.iask.in:35485/',//代理的api地址，就是要跨域的地址
-          target : config.VITE_BASIC_API,
+          target : config.VITE_BASIC_WEBSOCKET,
           changeOrigin : true,// 这个参数可以让target参数是域名
           ws : true,//是否启用websockets，用不到可设为false,
           secure : true,
