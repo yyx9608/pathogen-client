@@ -421,6 +421,7 @@ function queryResult(){
   request.result = subParam;
   request.pageSize = 100;
   axios.sampleResult(request).then(res=>{
+    console.log(res);
     dataInSample.value.results = res.result;
     res.result.forEach(value => {
       if (value.pathogenId != null) {

@@ -15,7 +15,7 @@
         <el-table-column prop="agentType" label="代理商类型" />
       </el-table>
       <el-button v-if="hasMore && agents.length > 0 && !loading" v-on:click="fetchAgents">加载更多</el-button>
-      <div v-if="hasMore && loading">加载中</div>
+      <div v-if="hasMore && loading">{{ Notifications.LOADING }}</div>
       <el-button style="width: 100%" v-on:click="showAgentDialog">添加代理商</el-button>
     </el-main>
 

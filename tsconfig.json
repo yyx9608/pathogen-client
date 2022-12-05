@@ -9,9 +9,10 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "esModuleInterop": true,
+    "strictNullChecks": false,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "noEmit": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

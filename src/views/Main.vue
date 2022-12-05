@@ -16,10 +16,10 @@
         <el-scrollbar v-if="currentLab.taskPager.content.length > 0"  class="tasks">
           <ul v-infinite-scroll="loadMoreTask" class="infinite-list list "
               :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
-            <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item" >{{ item.name }}</li>
+            <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item.id" >{{ item.name }}</li>
           </ul>
-          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && currentLab.taskPager.loading">加载中...</p>
-          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && !currentLab.taskPager.hasMore">我是有底线的</p>
+          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && currentLab.taskPager.loading">{{ Notifications.LOADING }}</p>
+          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && !currentLab.taskPager.hasMore">{{ Notifications.NO_MORE }}</p>
         </el-scrollbar>
       </el-aside>
       <el-main>

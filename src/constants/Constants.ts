@@ -13,6 +13,8 @@ export class Notifications {
     static INPUT_KEY_WORD : string = '请输入关键字';
     static START_DATE_TIME : string = '起始时间';
     static END_DATE_TIME : string = '起始时间';
+    static LOADING : string = '加载中';
+    static NO_MORE : string = '我是有底线的';
 
     
     static DATE_TIME_FORMAT : string = 'yyyy-MM-dd HH:mm:ss';
