@@ -1,4 +1,6 @@
 export class RequestUrl {
+    
+    static readonly BASE_URL : string = '/api';
 
     static readonly LOGIN : string = '/login';
     static readonly QUERY_LABS : string = '/prj/lab/queryList';

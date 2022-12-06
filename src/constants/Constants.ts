@@ -18,5 +18,6 @@ export class Notifications {
 
     
     static DATE_TIME_FORMAT : string = 'yyyy-MM-dd HH:mm:ss';
+    
 
 }
