@@ -33,8 +33,18 @@
               </el-dropdown>
             </div>
           </template>
-          <el-scrollbar max-height="500px">
+          <el-scrollbar>
             <el-descriptions direction="vertical" :column="14" :title="dataInSample.sampleInfo.name" border size="default">
+              <template #extra>
+                <el-popover width="200" v-if="associatedSample.length > 0" placement="left" trigger="click">
+                  <el-table max-height="600" :data="associatedSample" @row-click="onAssociatedSampleItemClicked" size="small">
+                    <el-table-column width="150" property="createdAt" :label="Notifications.HISTORY_RECORDS" />
+                  </el-table>
+                  <template #reference>
+                    <el-icon><Warning /></el-icon>
+                  </template>
+                </el-popover>
+              </template>
               <el-descriptions-item label="样本编号" span="2">{{ dataInSample.sampleInfo.sampleId }}</el-descriptions-item>
               <el-descriptions-item label="报告" span="8">
                 {{ dataInSample.sampleInfo.reportFile }}
@@ -203,6 +213,7 @@ import Result from "./ResultPanel.vue";
 import {Action} from "../../entity/enums/local/Action";
 import {Pathogen} from "../../entity/response/Pathogen";
 import store from "../../store";
+import router from "../../router";
 
 const props = defineProps<{ sampleId : string }>();
 const dataInSample = ref<DataInSample>(new DataInSample()) as Ref<DataInSample>;
@@ -210,6 +221,7 @@ const fetchingSampleInfo = ref<boolean>(false) as Ref<boolean>;
 const fetchingResult = ref<boolean>(false) as Ref<boolean>;
 const selectedPathogen = ref<string>('') as Ref<string>;
 const pathogenContentMap = ref<Map<string,Pathogen>>(store.getters.getPathogenMap) as Ref<Map<string,Pathogen>>;
+const associatedSample = ref<SampleInfo[]>([]) as Ref<SampleInfo[]>;
 
 const showVerifyDialog = ref<boolean>(false) as Ref<boolean>;
 const verifyForm = ref<SampleInfo>(new SampleInfo()) as Ref<SampleInfo>;
@@ -242,6 +254,16 @@ const handleCommand = (command: string | number | object) => {
   } else if (command === Command.GENERATE_REPORT){
     generateReport();
   }
+}
+
+function onAssociatedSampleItemClicked(row : SampleInfo, column : any, event : any){
+  router.push({
+    name: 'sample',
+    replace : false,
+    query : {
+      id : row.id,
+    }
+  });
 }
 
 function onStatusChanged(val: AnalysisResult) {
@@ -442,10 +464,21 @@ function querySampleInfo() {
   axios.querySample(sample).then(res=>{
     dataInSample.value.sampleInfo = res.result;
     queryResult();
+    queryAssociatedSample();
   }).catch(e=>{
     console.error(e);
   }).finally(()=>{
     fetchingSampleInfo.value = false;
+  });
+}
+
+function queryAssociatedSample() {
+  axios.associatedSample(dataInSample.value.sampleInfo).then(res=>{
+    associatedSample.value = res.result;
+  }).catch(e=>{
+    console.error(e);
+  }).finally(()=>{
+
   });
 }
 

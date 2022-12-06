@@ -28,5 +28,6 @@ export class RequestUrl {
     static readonly REMOVE_ERROR_TASK : string = '/prj/task/delete';
     static readonly SEARCH_TASK : string = '/prj/task/search';
     static readonly SEARCH_SAMPLE : string = '/prj/sample/search';
+    static readonly ASSOCIATED_SAMPLE : string = '/prj/sample/associated';
 
 }

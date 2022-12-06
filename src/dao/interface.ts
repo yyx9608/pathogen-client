@@ -247,8 +247,16 @@ function insertAgent(params : Agent){
   return axios.post<Response<string>, Response<string>, Agent>(RequestUrl.INSERT_AGENT, params);
 }
 
+/**
+ * 获取同名患者一个月前的检测完成记录
+ * @param params
+ */
+function associatedSample(params : SampleInfo) {
+  return axios.post<Response<SampleInfo[]>, Response<SampleInfo[]>, SampleInfo>(RequestUrl.ASSOCIATED_SAMPLE, params);
+}
+
 export default { queryLabs, login, querySeq, taskList, task,removeTask,
   querySample, exportFile, createTask, startTask ,stopTask,fetchAgents,insertAgent,
-  sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport,
+  sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport, associatedSample,
   sampleVerify, resultVerify, submitUpload, resultSearch, fetchConfig, updateConfig,
   sampleSearch, taskSearch, pathogenQuery, pathogenSearch, addResult}
