@@ -20,7 +20,7 @@ export default defineConfig(({command, mode})=>{
           target : config.VITE_BASIC_API,
           ws: true,
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/devServer/, ''),
+          rewrite: path => path.replace(/^\/api/, ''),
         },
         'ws://': {
           //target : 'ws://localhost:8080/',//代理的api地址，就是要跨域的地址
