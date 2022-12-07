@@ -86,7 +86,7 @@ function fetchUserConfig() {
   }).catch(e=>{
     ElNotification({
       title: Notifications.FAIL,
-      message: Notifications.FAIL,
+      message: e,
       type: 'error',
     })
   }).finally(()=>{
