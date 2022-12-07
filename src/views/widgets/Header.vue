@@ -14,11 +14,12 @@
 <script lang="ts" setup>
 
 import router from "../../router";
+import {ComponentConstants} from "../../constants/ComponentConstants";
 
 
 function toHome() {
   router.push({
-    name: 'main',
+    name: ComponentConstants.MAIN,
     replace : false,
     query : {
       timestamp : Date.now()
@@ -28,7 +29,7 @@ function toHome() {
 
 function toConfig() {
   router.push({
-    name: 'config',
+    name: ComponentConstants.CONFIG,
     replace : false,
     query : {
       timestamp : Date.now()
@@ -38,7 +39,7 @@ function toConfig() {
 
 function toSearch() {
   router.push({
-    name: 'search',
+    name: ComponentConstants.SEARCH,
     replace : false,
     query : {
       timestamp : Date.now()

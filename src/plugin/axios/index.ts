@@ -5,6 +5,7 @@ import store from '../../store/index';
 import {Notifications} from "../../constants/Constants";
 import router from "../../router";
 import {RequestUrl} from "./RequestUrl";
+import {ComponentConstants} from "../../constants/ComponentConstants";
 
 
 axios.defaults.baseURL = RequestUrl.BASE_URL;
@@ -33,7 +34,7 @@ axios.interceptors.response.use(res => {
             duration : 0,
             onClick() {
                 notification.close();
-                router.push({ name: 'login', replace : true }).then((res)=>{
+                router.push({ name: ComponentConstants.LOGIN, replace : true }).then((res)=>{
 
                 }).catch(e=>{
 

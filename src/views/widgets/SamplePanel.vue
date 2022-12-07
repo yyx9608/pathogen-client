@@ -214,6 +214,7 @@ import {Action} from "../../entity/enums/local/Action";
 import {Pathogen} from "../../entity/response/Pathogen";
 import store from "../../store";
 import router from "../../router";
+import {ComponentConstants} from "../../constants/ComponentConstants";
 
 const props = defineProps<{ sampleId : string }>();
 const dataInSample = ref<DataInSample>(new DataInSample()) as Ref<DataInSample>;
@@ -258,7 +259,7 @@ const handleCommand = (command: string | number | object) => {
 
 function onAssociatedSampleItemClicked(row : SampleInfo, column : any, event : any){
   router.push({
-    name: 'sample',
+    name: ComponentConstants.SAMPLE,
     replace : false,
     query : {
       id : row.id,

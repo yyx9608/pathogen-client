@@ -82,6 +82,7 @@ import {DateCondition} from "../entity/request/condition/DateCondition";
 import {format} from 'date-fns';
 import {SampleSearchRequest} from "../entity/request/SampleSearchRequest";
 import router from "../router";
+import {ComponentConstants} from "../constants/ComponentConstants";
 
 const shortcuts = [
   {
@@ -160,7 +161,7 @@ function onTableItemClick(row : any, column : any, event : any){
   console.log('row ' + row + ' column ' + column + ' event ' + event);
   if (target.value === SearchTarget.TASK){
     router.push({
-      name: 'task',
+      name: ComponentConstants.TASK,
       replace : false,
       query : {
         id : row.id,
@@ -169,7 +170,7 @@ function onTableItemClick(row : any, column : any, event : any){
     });
   } else if (target.value === SearchTarget.SAMPLE){
     router.push({
-      name: 'sample',
+      name: ComponentConstants.SAMPLE,
       replace : false,
       query : {
         id : row.id,

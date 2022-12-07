@@ -8,6 +8,7 @@ import PathogenPanel from '../views/widgets/PathogenPanel.vue';
 import TaskDetail from '../views/TaskDetail.vue';
 import SampleDetail from '../views/SampleDetail.vue';
 import Agents from '../views/Agents.vue';
+import {ComponentConstants} from "../constants/ComponentConstants";
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
@@ -16,21 +17,21 @@ import Agents from '../views/Agents.vue';
 // 我们后面再讨论嵌套路由。
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'none',
+    path: ComponentConstants.ROOT,
+    name: ComponentConstants.NONE,
     component: entry,
     redirect() {
-      return { name: 'login' };
+      return { name: ComponentConstants.LOGIN };
     },
     children: [
-      { path: 'main', name: 'main', component: Main },
-      { path: 'login', name: 'login', component: Login },
-      { path: 'search', name: 'search', component: Search },
-      { path: 'config', name: 'config', component: UserConfig },
-      { path: 'pathogen', name: 'pathogen', component: PathogenPanel },
-      { path: 'task', name: 'task', component: TaskDetail },
-      { path: 'sample', name: 'sample', component: SampleDetail },
-      { path: 'agents', name: 'agents', component: Agents },
+      { path: ComponentConstants.MAIN, name: ComponentConstants.MAIN, component: Main },
+      { path: ComponentConstants.LOGIN, name: ComponentConstants.LOGIN, component: Login },
+      { path: ComponentConstants.SEARCH, name: ComponentConstants.SEARCH, component: Search },
+      { path: ComponentConstants.CONFIG, name: ComponentConstants.CONFIG, component: UserConfig },
+      { path: ComponentConstants.PATHOGEN, name: ComponentConstants.PATHOGEN, component: PathogenPanel },
+      { path: ComponentConstants.TASK, name: ComponentConstants.TASK, component: TaskDetail },
+      { path: ComponentConstants.SAMPLE, name: ComponentConstants.SAMPLE, component: SampleDetail },
+      { path: ComponentConstants.AGENTS, name: ComponentConstants.AGENTS, component: Agents },
     ],
   },
 ];

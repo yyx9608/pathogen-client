@@ -20,10 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from '@vue/reactivity';
-import { login } from '../dao/interface';
+import {ref} from '@vue/reactivity';
+import {login} from '../dao/interface';
 import {User} from "../entity/response/User";
 import router from "../router";
+import {UserType} from "../entity/enums/UserType";
+import {ComponentConstants} from "../constants/ComponentConstants";
 
 // 用户名
 const username = ref('chenjianhua');
@@ -35,13 +37,23 @@ function loginBoke() {
   login(user).then(res=>{
     //current login user: res.result[0]
     console.log(res)
-    router.push({
-      name: 'main',
-      replace : true,
-      query : {
-        timestamp : Date.now()
-      }
-    });
+    if (res.result[0].type === UserType.ENGINEER) {
+      router.push({
+        name: ComponentConstants.MAIN,
+        replace: true,
+        query: {
+          timestamp: Date.now()
+        }
+      });
+    } else if (res.result[0].type === UserType.ADMINISTRATOR){
+      router.push({
+        name: ComponentConstants.MAIN,
+        replace: true,
+        query: {
+          timestamp: Date.now()
+        }
+      });
+    }
   }).catch(e=>{
     console.error(e)
   })
