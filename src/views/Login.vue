@@ -47,7 +47,7 @@ function loginBoke() {
       });
     } else if (res.result[0].type === UserType.ADMINISTRATOR){
       router.push({
-        name: ComponentConstants.MAIN,
+        name: ComponentConstants.ADMIN,
         replace: true,
         query: {
           timestamp: Date.now()

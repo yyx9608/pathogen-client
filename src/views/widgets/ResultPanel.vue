@@ -54,8 +54,8 @@
           <el-input v-model="result.pathogensNums" />
         </el-form-item>
       </el-form>
-    <el-button v-if="action === Action.EDIT || action === Action.INSERT" :loading="submitForm" :onclick="clickBtn">保存</el-button>
-    <el-button v-if="action === Action.VIEW" :loading="submitForm" :onclick="clickBtn">返回</el-button>
+    <el-button v-if="action === Action.EDIT || action === Action.INSERT" :loading="submitForm" :onclick="clickBtn">{{ Notifications.SAVE }}</el-button>
+    <el-button v-if="action === Action.VIEW" :loading="submitForm" :onclick="clickBtn">{{ Notifications.CANCEL }}</el-button>
   </div>
 
 </template>
@@ -172,7 +172,7 @@ function insertResult() {
   }).catch(e=>{
     ElNotification({
       title: Notifications.FAIL,
-      message: Notifications.FAIL,
+      message: e,
       type: 'error',
     });
     console.error(e);

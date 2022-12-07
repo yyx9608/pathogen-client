@@ -231,6 +231,10 @@ function pathogenQuery(params: Pathogen) {
   return axios.post<Response<Pathogen>,Response<Pathogen>,Pathogen>(RequestUrl.QUERY_PATHOGEN, params)
 }
 
+function queryUserList(params : BasePagerRequest) {
+  return axios.post<Response<User[]>, Response<User[]>, BasePagerRequest>(RequestUrl.QUERY_USER_LIST, params);
+}
+
 /**
  * 搜索病原
  * @param params
@@ -247,6 +251,15 @@ function insertAgent(params : Agent){
   return axios.post<Response<string>, Response<string>, Agent>(RequestUrl.INSERT_AGENT, params);
 }
 
+function updateUser(params : User){
+  return axios.post<Response<string>,Response<string>, User>(RequestUrl.UPDATE_USER, params);
+}
+
+function insertUser(params : User){
+  return axios.post<Response<string>,Response<string>, User>(RequestUrl.INSERT_USER, params);
+}
+
+
 /**
  * 获取同名患者一个月前的检测完成记录
  * @param params
@@ -255,7 +268,7 @@ function associatedSample(params : SampleInfo) {
   return axios.post<Response<SampleInfo[]>, Response<SampleInfo[]>, SampleInfo>(RequestUrl.ASSOCIATED_SAMPLE, params);
 }
 
-export default { queryLabs, login, querySeq, taskList, task,removeTask,
+export default { queryLabs, login, querySeq, taskList, task,removeTask,queryUserList,updateUser,insertUser,
   querySample, exportFile, createTask, startTask ,stopTask,fetchAgents,insertAgent,
   sampleResult, sampleInfo, sampleInfoGroupByAgent, generateReport, associatedSample,
   sampleVerify, resultVerify, submitUpload, resultSearch, fetchConfig, updateConfig,

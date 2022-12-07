@@ -12,5 +12,6 @@ export class ComponentConstants {
 	static readonly SAMPLE : string = 'sample';
 	static readonly AGENTS : string = 'agents';
 	static readonly USER : string = 'user';
+	static readonly ADMIN : string = 'admin/account';
 	
 }

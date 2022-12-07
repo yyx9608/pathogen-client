@@ -9,6 +9,7 @@ import TaskDetail from '../views/TaskDetail.vue';
 import SampleDetail from '../views/SampleDetail.vue';
 import Agents from '../views/Agents.vue';
 import {ComponentConstants} from "../constants/ComponentConstants";
+import AccountManager from '../views/admin/AccountManager.vue';
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
@@ -32,6 +33,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: ComponentConstants.TASK, name: ComponentConstants.TASK, component: TaskDetail },
       { path: ComponentConstants.SAMPLE, name: ComponentConstants.SAMPLE, component: SampleDetail },
       { path: ComponentConstants.AGENTS, name: ComponentConstants.AGENTS, component: Agents },
+      { path: ComponentConstants.ADMIN, name: ComponentConstants.ADMIN, component: AccountManager},
     ],
   },
 ];

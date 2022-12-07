@@ -29,5 +29,10 @@ export class RequestUrl {
     static readonly SEARCH_TASK : string = '/prj/task/search';
     static readonly SEARCH_SAMPLE : string = '/prj/sample/search';
     static readonly ASSOCIATED_SAMPLE : string = '/prj/sample/associated';
+    
+    
+    static readonly QUERY_USER_LIST : string = '/admin/queryList';
+    static readonly UPDATE_USER : string = '/admin/update';
+    static readonly INSERT_USER : string = '/admin/insert';
 
 }
