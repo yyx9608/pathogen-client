@@ -164,6 +164,7 @@ function onTableItemClick(row : any, column : any, event : any){
       replace : false,
       query : {
         id : row.id,
+        timestamp : Date.now(),
       }
     });
   } else if (target.value === SearchTarget.SAMPLE){
@@ -172,6 +173,7 @@ function onTableItemClick(row : any, column : any, event : any){
       replace : false,
       query : {
         id : row.id,
+        timestamp : Date.now(),
       }
     });
   }

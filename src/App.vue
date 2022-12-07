@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <router-view :key="$route.path + $route.query.timestamp"/>
 </template>
 
 <style lang="scss">

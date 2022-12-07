@@ -17,19 +17,43 @@ import router from "../../router";
 
 
 function toHome() {
-  router.push({ name: 'main', replace : false });
+  router.push({
+    name: 'main',
+    replace : false,
+    query : {
+      timestamp : Date.now()
+    }
+  });
 }
 
 function toConfig() {
-  router.push({ name: 'config', replace : false });
+  router.push({
+    name: 'config',
+    replace : false,
+    query : {
+      timestamp : Date.now()
+    }
+  });
 }
 
 function toSearch() {
-  router.push({ name: 'search', replace : false });
+  router.push({
+    name: 'search',
+    replace : false,
+    query : {
+      timestamp : Date.now()
+    }
+  });
 }
 
 function toAgents() {
-  router.push({ name: 'agents', replace : false });
+  router.push({
+    name: 'agents',
+    replace : false,
+    query : {
+      timestamp : Date.now()
+    }
+  });
 }
 
 </script>

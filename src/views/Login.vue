@@ -35,7 +35,13 @@ function loginBoke() {
   login(user).then(res=>{
     //current login user: res.result[0]
     console.log(res)
-    router.push({ name: 'main', replace : true });
+    router.push({
+      name: 'main',
+      replace : true,
+      query : {
+        timestamp : Date.now()
+      }
+    });
   }).catch(e=>{
     console.error(e)
   })

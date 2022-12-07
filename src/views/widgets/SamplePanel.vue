@@ -262,6 +262,7 @@ function onAssociatedSampleItemClicked(row : SampleInfo, column : any, event : a
     replace : false,
     query : {
       id : row.id,
+      timestamp : Date.now(),
     }
   });
 }
