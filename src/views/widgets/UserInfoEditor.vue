@@ -20,7 +20,7 @@
       </el-select>
     </el-form-item>
     <el-form-item v-if="action !== Action.INSERT" label="用户状态">
-      <el-select v-model="user.status" :disabled="action === Action.INSERT" :placeholder="action === Action.INSERT ? UserStatus.ENABLE : user.status">
+      <el-select v-model="user.status" :placeholder="user.status">
         <el-option :key="UserStatus.ENABLE" :label="UserStatus.ENABLE" :value="UserStatus.ENABLE" :disabled="user.status === UserStatus.ENABLE"/>
         <el-option :key="UserStatus.DISABLE" :label="UserStatus.DISABLE" :value="UserStatus.DISABLE" :disabled="user.status === UserStatus.DISABLE"/>
       </el-select>
