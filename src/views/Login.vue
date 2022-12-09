@@ -6,14 +6,14 @@
       </div>
       <el-form>
         <el-form-item>
-          <el-input v-model="username" placeholder="请输入用户名"></el-input>
+          <el-input class="el-input1" v-model="username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-input v-model="password" show-password placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div>
-        <el-button type="primary" @click="loginBoke" >登录</el-button>
+        <el-button id="btn" class="center" type="primary" @click="loginBoke" >登       录</el-button>
       </div>
     </div>
   </div>
@@ -68,6 +68,12 @@ function loginBoke() {
   background: url(../assets/background.png) no-repeat;
   background-size: 100%;
 }
+.el-input1{
+  border-top-style:hidden;
+  //border-right-style:hidden;
+  //border-bottom-style:solid;
+  //border-left-style:hidden;
+}
 
 .login {
   width: 30%;
@@ -79,25 +85,28 @@ function loginBoke() {
   transform: translate(-50%, -50%);
   color: rgb(63, 61, 61);
 }
-
-.btn {
+btn.center
+{
+  text-align:center;
+}
+#btn {
   /*登录按钮*/
   display: inline-block;
-  text-align: center;
+  //text-align: center;
 
   transform: translate(-50%, -50%);
   /*display:flex;*/
-  padding: 5px;
-  width: 80%;
+  //padding: 5px;
+  width: 100%;
   /*长度*/
   height: 150%;
   margin: auto;
   margin-top: 1px;
   /*边框与上面的距离*/
-  margin-left: 190px;
-  margin-right: 210px;
-  background-color: darkred;
-  color: #492626;
+  //margin-left: 190px;
+  //margin-right: 210px;
+  background-color: #B32929;
+  //color: #B32929;
 }
 
 :deep(.el-form) {

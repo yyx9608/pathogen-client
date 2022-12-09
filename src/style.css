@@ -81,12 +81,18 @@ button:focus-visible {
 
 .box-card {
   width: 100%;
+  background-color: #3E3F3F;
+  /*color: #B32929;*/
 }
-
+/*表格第一行*/
 .card-header {
   display: flex;
+  height: 100%;
   justify-content: space-between;
   align-items: center;
+  color: #f9f9f9;
+  background-color: #3E3F3F;
+
 }
 
 .max-w {
@@ -119,6 +125,8 @@ button:focus-visible {
 
 .header {
   height: 50px;
+  background-color: #B32929;
+  color: #f9f9f9;
 }
 
 .justify-content-center {
