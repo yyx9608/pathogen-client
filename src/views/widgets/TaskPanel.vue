@@ -382,4 +382,9 @@ function queryTask(){
 <style scoped>
 
 
+:deep(.el-card__header){
+  background-color: #3E3F3F;
+}
+
+
 </style>

@@ -6,7 +6,7 @@
     <el-container class="sub-container">
       <el-aside class="aside list" style="overflow: auto;">
         <el-menu mode="horizontal" style="height: 50px; justify-content: center; align-items: center" :ellipsis="false">
-          <el-sub-menu index="1" :disabled="labs.content.length < 1">
+          <el-sub-menu  class="menu" index="1" :disabled="labs.content.length < 1">
             <template #title>{{ selectedLab }}</template>
             <el-menu-item @click="onLabSelect(item.id, item.name)" v-for="(item,index) in labs.content" :key="item.id" :value="item.id" :label="item.name" :id="item.id" index="1-{{String(index)}}">{{item.name}}</el-menu-item>
           </el-sub-menu>
@@ -18,13 +18,13 @@
               :infinite-scroll-disabled="currentLab.taskPager.loading || !currentLab.taskPager.hasMore">
             <li @click="onTaskSelect(item.id)" class="infinite-list-item" v-for="item in currentLab.taskPager.content" :key="item.id" >{{ item.name }}</li>
           </ul>
-          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && currentLab.taskPager.loading">{{ Notifications.LOADING }}</p>
-          <p v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && !currentLab.taskPager.hasMore">{{ Notifications.NO_MORE }}</p>
+          <p class="lab" v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && currentLab.taskPager.loading">{{ Notifications.LOADING }}</p>
+          <p class="lab1" v-if="currentLab.lab !== undefined && currentLab.taskPager.content.length > 0 && !currentLab.taskPager.hasMore">{{ Notifications.NO_MORE }}</p>
         </el-scrollbar>
       </el-aside>
       <el-main>
         <TaskPanel v-if="currentTask.taskId !== ''" @delete="deleteTask" :task-id="currentTask.taskId"></TaskPanel>
-        <el-empty v-if="currentTask.taskId === ''" description="empty view" />
+        <el-empty v-if="currentTask.taskId === ''" description=" " />
       </el-main>
     </el-container>
     <el-dialog v-model="showAddTask" destroy-on-close>
@@ -204,14 +204,44 @@ function onTaskSelect(taskId : string){
 
 <style lang="scss" scoped>
 
+p.lab1{
+  background-color: #B32929;
+  color: #B32929 ;
+}
 .main-container {
   width: 100%;
   height: 100%;
+  background: url(../assets/background1.png) no-repeat;
 }
 
 .sub-container {
   width: 100%;
   height: calc(100% - 50px);
+  color: #B32929;
+}
+.menu {
+  //background-color: #B32929;
+  font-weight: bolder;
+  font-size: larger;
+  color: #B32929;
+}
+.el-sub-menu.is-active {
+  //font-family:"Times New Roman",Times,serif;
+  font-size: larger;
+  font-weight: bolder;
+  //background-color: #B32929 !important;
+  color: #f9f9f9;
+  span {
+    color: #f9f9f9 !important;
+  }
+}
+.el-menu-item.is-active {
+  font-weight: bolder;
+  //background-color: #B32929 !important;
+  color: #f9f9f9;
+  span {
+    color: #f9f9f9 !important;
+  }
 }
 
 .add-task {
@@ -225,6 +255,8 @@ function onTaskSelect(taskId : string){
 .aside {
   width: 200px;
   margin-top: 50px;
+  color: #B32929;
+
 }
 
 .infinite-list .infinite-list-item {
@@ -242,5 +274,6 @@ function onTaskSelect(taskId : string){
   margin: 0;
   list-style: none;
 }
+
 
 </style>

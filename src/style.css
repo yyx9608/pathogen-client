@@ -80,11 +80,12 @@ button:focus-visible {
 }
 
 .box-card {
-  width: 100%;
-  background-color: #3E3F3F;
+  width: 100%;/*card的占屏比*/
+  background-color: #3E3F3F;/*card的header颜色*/
+
   /*color: #B32929;*/
 }
-/*表格第一行*/
+
 .card-header {
   display: flex;
   height: 100%;

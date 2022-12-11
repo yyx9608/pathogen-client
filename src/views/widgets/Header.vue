@@ -1,6 +1,7 @@
 <template>
 
   <el-row class="head">
+    <img src="../../assets/logo.png"/>
     <div><el-icon :onclick="toHome"><House /></el-icon></div>
     <el-row>
       <div><el-icon :onclick="toAgents"><User /></el-icon></div>
