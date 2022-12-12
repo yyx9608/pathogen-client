@@ -106,7 +106,7 @@
 <!--
       <el-collapse-item v-if="selectedSample !== undefined && selectedSample !== ''" name="2">
 -->
-        <el-divider v-if="selectedSample !== undefined && selectedSample !== ''" border-style="dashed" content-position="center">样本信息</el-divider>
+        <el-divider v-if="selectedSample !== undefined && selectedSample !== ''" border-style="dashed" content-position="center"></el-divider>
         <SamplePanel v-if="selectedSample !== undefined && selectedSample !== ''" :sample-id='selectedSample'></SamplePanel>
 <!--
       </el-collapse-item>

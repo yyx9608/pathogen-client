@@ -7,7 +7,7 @@
         <el-card v-if="!fetchingSampleInfo && dataInSample.sampleInfo.id !== undefined" class="box-card">
           <template #header>
             <div class="card-header">
-              <span></span>
+              <span>样本信息</span>
               <el-dropdown @command="handleCommand">
                 <el-icon><Menu /></el-icon>
                 <template #dropdown>
