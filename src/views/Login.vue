@@ -2,18 +2,26 @@
   <div class="loginbackground">
     <div class="login">
       <div style="font-size: 30px; font-weight: 700; margin-top: 20px">
-
-      </div>
-      <el-form>
-        <el-form-item>
-          <el-input class="el-input1" v-model="username" placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="password" show-password placeholder="请输入密码"></el-input>
-        </el-form-item>
-      </el-form>
-      <div>
+        <el-form>
+          <el-form-item>
+            <el-input class="el-input1" v-model="username" placeholder="请输入用户名"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input v-model="password" show-password placeholder="请输入密码"></el-input>
+          </el-form-item>
+        </el-form>
         <el-button id="btn" class="center" type="primary" @click="loginBoke" >登       录</el-button>
+      </div>
+<!--      <el-form>-->
+<!--        <el-form-item>-->
+<!--          <el-input class="el-input1" v-model="username" placeholder="请输入用户名"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item>-->
+<!--          <el-input v-model="password" show-password placeholder="请输入密码"></el-input>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+      <div>
+<!--        <el-button id="btn" class="center" type="primary" @click="loginBoke" >登       录</el-button>-->
       </div>
     </div>
   </div>

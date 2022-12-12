@@ -81,7 +81,7 @@ button:focus-visible {
 
 .box-card {
   width: 100%;/*card的占屏比*/
-  background-color: #3E3F3F;/*card的header颜色*/
+  background-color: #B32929;
 
   /*color: #B32929;*/
 }
@@ -141,8 +141,16 @@ button:focus-visible {
 
 .flex {
   display: flex;
+  color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .justify-content-end {
   justify-content: end;
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  color: #f9f9f9;
+  background-color: #3E3F3F;
 }

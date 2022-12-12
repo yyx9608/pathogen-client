@@ -384,6 +384,9 @@ function queryTask(){
 
 :deep(.el-card__header){
   background-color: #3E3F3F;
+  font-weight: bolder;
+  font-family: AlibabaSans;
+
 }
 
 

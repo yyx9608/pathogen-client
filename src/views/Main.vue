@@ -222,6 +222,7 @@ p.lab1{
 .menu {
   //background-color: #B32929;
   font-weight: bolder;
+  font-family: AlibabaSans;
   font-size: larger;
   color: #B32929;
 }

@@ -95,73 +95,83 @@
           </el-scrollbar>
         </el-card>
       </el-container>
-
       <el-divider border-style="dashed" content-position="center">检测结果</el-divider>
+      <el-container>
+      <el-card v-if="!fetchingSampleInfo && dataInSample.sampleInfo.id !== undefined" class="box-card">
+        <template #header>
+<!--          <div class="flex justify-content-end margin10">-->
+          <div class="card-header">
+            <span>检测结果</span>
+            <el-popover width="250" trigger="click">
+              <template #reference>
+                <el-icon><Operation /></el-icon>
+              </template>
+              <el-checkbox-group min="1" v-model="selectedColumns">
+                <el-checkbox label="信号强度" />
+                <el-checkbox label="报告区域" />
+                <el-checkbox label="初始报告区域" />
+                <el-checkbox label="病原" />
+                <el-checkbox label="样本类型" />
+                <el-checkbox label="报告标签" />
+                <el-checkbox label="reads" />
+                <el-checkbox label="copy nums" />
+                <el-checkbox label="mapping reads" />
+                <el-checkbox label="q30 reads" />
+                <el-checkbox label="该病原体同批检出数量" />
+              </el-checkbox-group>
+            </el-popover>
+          </div>
+        </template>
+<!--        <template>-->
+          <el-scrollbar>
+          <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="default">
+            <el-table-column v-if="selectedColumns.includes('信号强度')" align="center" prop="sign" label="信号强度"/>
+            <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" label="报告区域">
+              <template #default="scope">
+                <el-select v-model="dataInSample.results[scope.$index].status" @change="onStatusChanged(dataInSample.results[scope.$index])" :placeholder="dataInSample.results[scope.$index].status">
+                  <el-option :key="ResultStatus.MAIN" :label="ResultStatus.MAIN" :value="ResultStatus.MAIN" :disabled="dataInSample.results[scope.$index].status === ResultStatus.MAIN"/>
+                  <el-option :key="ResultStatus.GRAY" :label="ResultStatus.GRAY" :value="ResultStatus.GRAY" :disabled="dataInSample.results[scope.$index].status === ResultStatus.GRAY"/>
+                  <el-option :key="ResultStatus.BACKGROUND" :label="ResultStatus.BACKGROUND" :value="ResultStatus.BACKGROUND" :disabled="dataInSample.results[scope.$index].status === ResultStatus.BACKGROUND"/>
+                  <el-option :key="ResultStatus.HIDE" :label="ResultStatus.HIDE" :value="ResultStatus.HIDE" :disabled="dataInSample.results[scope.$index].status === ResultStatus.HIDE"/>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="selectedColumns.includes('初始报告区域')" align="center" prop="rawStatus" label="初始报告区域"/>
+            <el-table-column v-if="selectedColumns.includes('病原')" align="center" label="病原">
+              <template #default="scope">
+                <el-popover trigger="click" width="80%">
+                  <PathogenPanel :pathogen-id="selectedPathogen"></PathogenPanel>
+                  <template #reference>
+                    {{ (pathogenContentMap.get(scope.row.pathogenId) === undefined || pathogenContentMap.get(scope.row.pathogenId).id !== scope.row.pathogenId)
+                      ? '病原id:' + scope.row.pathogenId : pathogenContentMap.get(scope.row.pathogenId).name }}
+                  </template>
+                </el-popover>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="selectedColumns.includes('样本类型')" align="center" prop="sampleType" label="样本类型" />
+            <el-table-column v-if="selectedColumns.includes('报告标签')" align="center" prop="reportTag" label="报告标签" />
+            <el-table-column v-if="selectedColumns.includes('reads')" align="center" prop="readsNums" label="reads" />
+            <el-table-column v-if="selectedColumns.includes('copy nums')" align="center" prop="copyNums" label="copy nums" />
+            <el-table-column v-if="selectedColumns.includes('mapping reads')" align="center" prop="mappingReads" label="mapping reads" />
+            <el-table-column v-if="selectedColumns.includes('q30 reads')" align="center" prop="q30Reads" label="q30 reads" />
+            <el-table-column v-if="selectedColumns.includes('该病原体同批检出数量')" align="center" prop="pathogensNums" label="该病原体同批检出数量" />
+            <el-table-column align="center" fixed="right" label="操作" width="120">
+              <template #default="scope">
+                <el-container style="justify-content: center">
+                  <el-button-group>
+                    <el-button type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
+                    <el-button type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
+                  </el-button-group>
+                </el-container>
+              </template>
+            </el-table-column>
+          </el-table>
+          </el-scrollbar>
 
+      </el-card>
+    </el-container>
       <el-container direction="vertical" v-if="sampleId !== undefined && sampleId !== ''">
         <el-skeleton v-if="fetchingResult" :rows="10" animated />
-        <div class="flex justify-content-end margin10">
-          <el-popover width="250" trigger="click">
-            <template #reference>
-              <el-icon><Operation /></el-icon>
-            </template>
-            <el-checkbox-group min="1" v-model="selectedColumns">
-              <el-checkbox label="信号强度" />
-              <el-checkbox label="报告区域" />
-              <el-checkbox label="初始报告区域" />
-              <el-checkbox label="病原" />
-              <el-checkbox label="样本类型" />
-              <el-checkbox label="报告标签" />
-              <el-checkbox label="reads" />
-              <el-checkbox label="copy nums" />
-              <el-checkbox label="mapping reads" />
-              <el-checkbox label="q30 reads" />
-              <el-checkbox label="该病原体同批检出数量" />
-            </el-checkbox-group>
-          </el-popover>
-        </div>
-        <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="default">
-          <el-table-column v-if="selectedColumns.includes('信号强度')" align="center" prop="sign" label="信号强度"/>
-          <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" label="报告区域">
-            <template #default="scope">
-              <el-select v-model="dataInSample.results[scope.$index].status" @change="onStatusChanged(dataInSample.results[scope.$index])" :placeholder="dataInSample.results[scope.$index].status">
-                <el-option :key="ResultStatus.MAIN" :label="ResultStatus.MAIN" :value="ResultStatus.MAIN" :disabled="dataInSample.results[scope.$index].status === ResultStatus.MAIN"/>
-                <el-option :key="ResultStatus.GRAY" :label="ResultStatus.GRAY" :value="ResultStatus.GRAY" :disabled="dataInSample.results[scope.$index].status === ResultStatus.GRAY"/>
-                <el-option :key="ResultStatus.BACKGROUND" :label="ResultStatus.BACKGROUND" :value="ResultStatus.BACKGROUND" :disabled="dataInSample.results[scope.$index].status === ResultStatus.BACKGROUND"/>
-                <el-option :key="ResultStatus.HIDE" :label="ResultStatus.HIDE" :value="ResultStatus.HIDE" :disabled="dataInSample.results[scope.$index].status === ResultStatus.HIDE"/>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column v-if="selectedColumns.includes('初始报告区域')" align="center" prop="rawStatus" label="初始报告区域"/>
-          <el-table-column v-if="selectedColumns.includes('病原')" align="center" label="病原">
-            <template #default="scope">
-              <el-popover trigger="click" width="80%">
-                <PathogenPanel :pathogen-id="selectedPathogen"></PathogenPanel>
-                <template #reference>
-                  {{ (pathogenContentMap.get(scope.row.pathogenId) === undefined || pathogenContentMap.get(scope.row.pathogenId).id !== scope.row.pathogenId)
-                    ? '病原id:' + scope.row.pathogenId : pathogenContentMap.get(scope.row.pathogenId).name }}
-                </template>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column v-if="selectedColumns.includes('样本类型')" align="center" prop="sampleType" label="样本类型" />
-          <el-table-column v-if="selectedColumns.includes('报告标签')" align="center" prop="reportTag" label="报告标签" />
-          <el-table-column v-if="selectedColumns.includes('reads')" align="center" prop="readsNums" label="reads" />
-          <el-table-column v-if="selectedColumns.includes('copy nums')" align="center" prop="copyNums" label="copy nums" />
-          <el-table-column v-if="selectedColumns.includes('mapping reads')" align="center" prop="mappingReads" label="mapping reads" />
-          <el-table-column v-if="selectedColumns.includes('q30 reads')" align="center" prop="q30Reads" label="q30 reads" />
-          <el-table-column v-if="selectedColumns.includes('该病原体同批检出数量')" align="center" prop="pathogensNums" label="该病原体同批检出数量" />
-          <el-table-column align="center" fixed="right" label="操作" width="120">
-            <template #default="scope">
-              <el-container style="justify-content: center">
-                <el-button-group>
-                  <el-button type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
-                  <el-button type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
-                </el-button-group>
-              </el-container>
-            </template>
-          </el-table-column>
-        </el-table>
       </el-container>
     </el-container>
   </el-scrollbar>
@@ -487,6 +497,8 @@ function queryAssociatedSample() {
 </script>
 
 <style scoped>
-
+:deep(.el-card__header){
+  background-color: #3E3F3F;
+}
 
 </style>
