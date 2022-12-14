@@ -8,8 +8,8 @@
       <el-main style="text-align: -webkit-center">
         <el-descriptions class="half-w" title="用户配置" direction="horizontal" :column="1" size="large" border>
           <template #extra>
-            <el-button size="default" :onclick="toggleAction" type="primary">{{ action === Action.VIEW ? Notifications.EDIT : Notifications.SAVE }}</el-button>
-            <el-button v-if="action === Action.EDIT" size="default" :onclick="cancel" type="primary">{{ Notifications.CANCEL }}</el-button>
+            <el-button class="editbtn" size="default" :onclick="toggleAction" >{{ action === Action.VIEW ? Notifications.EDIT : Notifications.SAVE }}</el-button>
+            <el-button class="editbtn" v-if="action === Action.EDIT" size="default" :onclick="cancel" type="primary">{{ Notifications.CANCEL }}</el-button>
           </template>
           <el-descriptions-item :span="1" label="工作目录">
             <el-input v-model="config.workDir" :disabled="action === Action.VIEW" />
@@ -97,5 +97,8 @@ function fetchUserConfig() {
 </script>
 
 <style scoped>
-
+.editbtn{
+  background-color: #B32929;
+  color: #f9f9f9;
+}
 </style>

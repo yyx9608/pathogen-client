@@ -4,10 +4,12 @@
 
     <el-form :model="createTaskRequest" :disabled="action===Action.VIEW" label-position="right">
 
-      <el-form-item class="form-item" label="任务名称" label-width="200px" :prop='createTaskRequest.task.name'>
+<!--      <el-form-item class="form-item" label="任务名称" label-width="200px" :prop='createTaskRequest.task.name'>-->
+<!--        <el-input v-model="createTaskRequest.task.name"/>-->
+<!--      </el-form-item>-->
+      <el-form-item class="createpanel" label="任务名称" label-width="200px" :prop='createTaskRequest.task.name'>
         <el-input v-model="createTaskRequest.task.name"/>
       </el-form-item>
-
       <el-form-item class="form-item" label="样本信息表" label-width="200px">
         <el-upload drag limit='1' action="#" :http-request="upload">
           <div class="el-upload__text">
@@ -145,5 +147,9 @@ function upload(options: UploadRequestOptions) {
 </script>
 
 <style scoped>
-
+.createpanel{
+  border-color: #B32929;
+  /*border-bottom-color: #B32929;*/
+  max-width: 500px;
+}
 </style>

@@ -14,7 +14,7 @@
         <el-table-column prop="mail" label="邮箱"  />
         <el-table-column prop="agentType" label="代理商类型" />
       </el-table>
-      <el-button v-if="hasMore && agents.length > 0 && !loading" v-on:click="fetchAgents">加载更多</el-button>
+      <el-button class="agentsbtn" v-if="hasMore && agents.length > 0 && !loading" v-on:click="fetchAgents">加载更多</el-button>
       <div v-if="hasMore && loading">{{ Notifications.LOADING }}</div>
       <el-button style="width: 100%" v-on:click="showAgentDialog">添加代理商</el-button>
     </el-main>
@@ -125,5 +125,8 @@ function insertAgent() {
 </script>
 
 <style scoped>
-
+.agentsbtn{
+  background-color: #B32929;
+  color: #f9f9f9;
+}
 </style>

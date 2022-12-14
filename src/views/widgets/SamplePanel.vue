@@ -10,7 +10,7 @@
               <img src="../../assets/if-users.svg"/>
               <span>样本信息</span>
               <el-dropdown @command="handleCommand">
-                <el-icon><Menu /></el-icon>
+                <el-icon><Operation /></el-icon>
                 <template #dropdown>
                   <el-dropdown-menu >
                     <el-dropdown-item :command='Command.VERIFY'

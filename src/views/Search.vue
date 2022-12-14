@@ -8,7 +8,7 @@
       <el-container style="text-align: -webkit-center;" direction="vertical">
         <el-row>
           <el-col :span="6">
-            <el-select @change="onSelectChanged" v-model="target" :placeholder="SearchTarget.TASK" style="width: 115px">
+            <el-select class="select" @change="onSelectChanged" v-model="target" :placeholder="SearchTarget.TASK" style="width: 115px">
               <el-option :label="SearchTarget.TASK" :value="SearchTarget.TASK" />
               <el-option :label="SearchTarget.SAMPLE" :value="SearchTarget.SAMPLE" />
             </el-select>
@@ -262,8 +262,9 @@ function searchResult() {
 
 <style scoped>
 
-.search {
-
+.select{
+  background-color: #B32929;
+  color: #B32929;
 }
 
 </style>

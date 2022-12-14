@@ -1,8 +1,16 @@
 <template>
-
+<!--  <el-row>-->
   <el-row class="head">
-    <img src="../../assets/logo.png"/>
-    <div><el-icon :onclick="toHome"><House /></el-icon></div>
+<!--    <div><img src="../../assets/logo.png"/></div>-->
+<!--    <div><img src="../../assets/logo.png"/></div>-->
+<!--    <div><img src="../../assets/logo.png"/></div>-->
+<!--    <div><el-icon :onclick="toHome"><House /></el-icon></div>-->
+    <el-row class="head1">
+      <img src="../../assets/logo.png"/>
+      <el-icon :onclick="toHome"><HomeFilled /></el-icon>
+<!--      <el-icon :onclick="toHome"><House /></el-icon>-->
+    </el-row>
+<!--    <el-row><div><el-icon :onclick="toHome"><House /></el-icon></div></el-row>-->
     <el-row>
       <div><el-icon :onclick="toAgents"><User /></el-icon></div>
       <div><el-icon :onclick="toSearch"><Search /></el-icon></div>
@@ -67,6 +75,12 @@ function toAgents() {
   height: 50px;
   justify-content: space-between;
   align-content: center;
+  align-items: baseline;
+}
+
+.head1 {
+
+  align-items: baseline;
 }
 
 </style>
