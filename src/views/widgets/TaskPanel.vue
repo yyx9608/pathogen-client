@@ -386,6 +386,8 @@ function queryTask(){
   background-color: #3E3F3F;
   font-weight: bolder;
   font-family: AlibabaSans;
+  width: 100%;
+  height: 40px;
 
 }
 

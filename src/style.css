@@ -80,7 +80,7 @@ button:focus-visible {
 }
 
 .box-card {
-  width: 100%;/*card的占屏比*/
+  width: 100%;
   background-color: #B32929;
 
   /*color: #B32929;*/

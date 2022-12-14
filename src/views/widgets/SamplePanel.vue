@@ -7,6 +7,7 @@
         <el-card v-if="!fetchingSampleInfo && dataInSample.sampleInfo.id !== undefined" class="box-card">
           <template #header>
             <div class="card-header">
+              <img src="../../assets/if-users.svg"/>
               <span>样本信息</span>
               <el-dropdown @command="handleCommand">
                 <el-icon><Menu /></el-icon>
@@ -101,6 +102,7 @@
         <template #header>
 <!--          <div class="flex justify-content-end margin10">-->
           <div class="card-header">
+            <img src="../../assets/if-dna.svg"/>
             <span>检测结果</span>
             <el-popover width="250" trigger="click">
               <template #reference>
@@ -124,7 +126,7 @@
         </template>
 <!--        <template>-->
           <el-scrollbar>
-          <el-table :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="default">
+          <el-table :header-cell-style="{backgroud:'#B32829'}" :row-key="rowKey" :data="dataInSample.results" style="width: 100%" @cell-mouse-enter="showPathogen" highlight-current-row border size="default">
             <el-table-column v-if="selectedColumns.includes('信号强度')" align="center" prop="sign" label="信号强度"/>
             <el-table-column v-if="selectedColumns.includes('报告区域')" align="center" label="报告区域">
               <template #default="scope">
@@ -156,11 +158,11 @@
             <el-table-column v-if="selectedColumns.includes('q30 reads')" align="center" prop="q30Reads" label="q30 reads" />
             <el-table-column v-if="selectedColumns.includes('该病原体同批检出数量')" align="center" prop="pathogensNums" label="该病原体同批检出数量" />
             <el-table-column align="center" fixed="right" label="操作" width="120">
-              <template #default="scope">
+              <template  #default="scope">
                 <el-container style="justify-content: center">
                   <el-button-group>
-                    <el-button type="primary" size="small" icon="Edit" @click.prevent="editRow(scope.$index)"/>
-                    <el-button type="primary" size="small" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
+                    <el-button type="primary" size="small" color="white" icon="Edit" @click.prevent="editRow(scope.$index)"/>
+                    <el-button type="primary" size="small" color="white" icon="DocumentCopy" @click.prevent="copyRow(scope.$index)"/>
                   </el-button-group>
                 </el-container>
               </template>
@@ -496,9 +498,15 @@ function queryAssociatedSample() {
 
 </script>
 
-<style scoped>
+<!--<style scoped>-->
+<style lang="css">
+.el-icon-my-edit{
+  background: url("../../assets/iconPark-edit-two.svg") center no-repeat;
+}
+
 :deep(.el-card__header){
   background-color: #3E3F3F;
 }
+
 
 </style>
